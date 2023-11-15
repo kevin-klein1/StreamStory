@@ -1,0 +1,260 @@
+/* General tags */
+p {
+    color: #CFF56A;
+    font-family: Right_Reg;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    margin: 0px;
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+  
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Cursors */
+
+.pointer {
+    cursor: pointer;
+}
+
+
+/* ID tags */
+
+#fade-in-element {
+    opacity: 0; /* Set initial opacity to 0 */
+    transition: opacity 3s; /* Add a transition for smooth fading */
+  }
+
+#instructions_fade {
+    opacity: 0;
+    transition: opacity 1.5s;
+}
+
+#browseButton {
+    color: #CFF56A; 
+    font-weight: bold; 
+    font-family: Right_Light;
+}
+
+#browseButton:hover {
+    text-decoration: underline;
+    color: #27c764;
+}
+
+/* Class tags */
+
+.right {
+    font-family: Right_Norm;
+    text-align: center;
+}
+
+.nav-link {
+    color:#3e034f
+}
+
+
+.but {
+    background: #3e034f;
+    color: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    box-shadow: 1px 1px 1px #eee;
+    text-shadow: none;
+    }
+
+.but_sq {
+    background: #3e034f;
+    color: #ffffff;
+    border: 1px solid #eee;
+    box-shadow: 1px 1px 1px #eee;
+    text-shadow: none;
+    text-align: center;
+    }
+
+.year_but > input {
+    background: #efebf0;
+    color: #3e034f;
+    border: 1px solid #0d0d0d;
+    border-radius: 30px;
+    box-shadow: 2px 2px 2px #eee;
+    text-shadow: none;
+    font-size: 50px;;
+    margin: 5px;
+    text-align: center;
+    }   
+
+    .font_fade {
+        opacity: 0;
+        transition: opacity 1s; /* Set the transition duration to 1 second */
+    }
+
+    .twosec_font_fade {
+        opacity: 0;
+        transition: opacity 1.5s; /* Set the transition duration to 1 second */
+    }
+
+
+    .body_fade {
+        opacity: 0;
+        transition: opacity .5s;
+    }
+
+
+
+
+
+.title {
+    color:#CFF56A;
+    font-family: Right_Norm;
+    font-size: 70px;
+    text-align: center;
+    margin: 2px;
+    letter-spacing: -6px;
+}
+
+.para {
+    color:whitesmoke;
+    font-family: Right_Norm;
+    font-size: 70px;
+    text-align: center;
+    margin: 10px;
+    letter-spacing: -6px;
+    text-decoration: underline;
+    text-decoration-style:solid;
+    text-decoration-thickness: 2px;
+    text-shadow: 4px 1px rgb(82, 59, 85);
+
+
+}
+
+.para2 {
+    color:white;
+    font-family: Mori;
+    font-size: 30px;
+    margin-bottom: 0px;
+
+  
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Set to 100% of the viewport height */
+    margin-top: 10px;
+    margin-bottom: -100px;
+
+}
+
+.container2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90%; /* Set to 100% of the viewport height */
+    margin-top: 10px;
+    margin-bottom: -100px;
+   
+
+}
+
+
+.padding {
+
+    padding: 20px;
+}
+
+
+.font_italic {
+    color:#CFF56A;
+    font-family: Right_Italic;
+    font-size: 100px;
+    margin:2px;
+    text-align: center;
+}
+
+.purple {
+    background-color: hsl(261, 45%, 73%);
+}
+
+.text_border {
+    border:#CFF56A;
+    border-style: solid;
+    border-width: 5px;
+    padding: 40px;
+    border-radius: 30px;
+}
+
+.custom-navbar {
+    background-color:#e4fba1; /* Set your desired background color */
+    /* Add any other custom styles as needed */
+  }
+
+  .custom-navfont {
+    font-family: Right_Light; 
+    color:antiquewhite;
+  }
+
+
+.photo_back {
+
+        background-image: url('/static/photos/sgcdesignco-NIo8Fd-RngE-unsplash.jpg'); /* Replace with the path to your image */
+        background-size: cover; /* This will make sure the image covers the entire container */
+        background-position: center center; /* This will center the image within the container */
+        background-repeat: no-repeat; /* This will prevent the image from repeating */
+        /* Add any other custom styles for the container */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Custom fonts */
+
+
+@font-face {
+    font-family: Mori;
+    src: url(/static/fonts/Mori/PPMori-Extralight.otf);
+}
+
+@font-face {
+    font-family: Rader;
+    src: url(/static/fonts/Rader/PPRader-Bold.otf);
+}
+
+@font-face {
+    font-family: Right_Norm;
+    src: url(/static/fonts/Right/PPRightGroteskText-WideBold.otf);
+}
+
+@font-face {
+    font-family: Right_Italic;
+    src: url(/static/fonts/Right/PPRightGroteskText-SpatialLightItalic.otf);
+}
+
+@font-face {
+    font-family: Right_Light;
+    src: url(/static/fonts/Right/PPRightGroteskText-Regular.otf);
+}
+
+@font-face {
+    font-family: Right_Reg;
+    src: url(/static/fonts/Right/PPRightGroteskText-Regular.otf);
+}
