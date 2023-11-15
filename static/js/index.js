@@ -19,7 +19,7 @@ let droppedFiles = [];
 
             let button = document.getElementById('browseButton');
             button.style.color = '#1DB954';
-            button.style.fontWeight = "2px dashed purple";
+            button.style.fontWeight = "bold";
 
 
             let files = event.dataTransfer.files;
@@ -43,10 +43,6 @@ let droppedFiles = [];
 
         document.getElementById('browseButton').addEventListener('click', function() {
             document.getElementById('fileInput').click();
-
-
-
-
         });
 
         document.getElementById('fileInput').addEventListener('change', function(event) {
@@ -65,10 +61,8 @@ let droppedFiles = [];
                     let file = files[i];
                     if ((!isFileAlreadyUploaded(file)) && (droppedFiles.length < 10)) {
                         droppedFiles.push(file);
-    
                     }
                 }
-           
                 displayFileNames(droppedFiles);
             }
         });

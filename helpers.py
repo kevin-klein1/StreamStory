@@ -8,8 +8,6 @@ import base64
 
 ## Define Functions
 
-def hi():
-    print("hi")
 
 ## Merging many Spotify Json files as one
 def merge_json(files, output_file):
@@ -90,10 +88,11 @@ client_secret = os.getenv("CLIENT_SECRET")
 token = get_token()
 print(token)
 
-'''
+
 
 # Merge JSON files
-input_files = ['json_files/Spotify_0.json', 'json_files/Spotify_1.json', 'json_files/Spotify_2.json', 'json_files/Spotify_3.json', 'json_files/Spotify_4.json', 'json_files/Spotify_5.json', 'json_files/Spotify_6.json', 'json_files/Spotify_7.json']  # Replace with actual file names
+# Replace with actual file names
+input_files = ['json_files/Spotify_History_Audio_2016-2018_1.json']
 output_file = 'merged_file.json'
 merge_json(input_files, output_file)
 
@@ -101,7 +100,7 @@ merge_json(input_files, output_file)
 ## Create file variable
 f = open('merged_file.json')
 
-Load file into a data object
+##Load file into a data object
 data = json.load(f)
 
 
@@ -122,8 +121,8 @@ print()
 
 
 for i in data:
-    ##time_string = i['ts']
-    ##date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
+    time_string = i['ts']
+    date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
 
     
     
@@ -189,4 +188,3 @@ for (song, artist), number in list(convert_songs.items())[:10]:
 
 f.close()
 
-'''

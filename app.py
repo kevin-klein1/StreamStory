@@ -1,9 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for
-
 import requests
 import os
 from werkzeug.utils import secure_filename
-import seaborn as sea
 import json
 import datetime
 from dotenv import load_dotenv
@@ -33,7 +31,7 @@ def allowed_file(filename):
 
 
 
-## Route display
+## Index route display
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
@@ -55,21 +53,21 @@ def index():
             if allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-              
-        return redirect("/results")
+        return redirect("/years")
         
     
-@app.route("/results", methods=["GET", "POST"])
-def results():
+@app.route("/years", methods=["GET", "POST"])
+def years():
     if request.method == "GET":
+
         input_files = []
         for filename in os.listdir(UPLOAD_FOLDER):
             input_files.append("json_files/" + filename)
 
-        output_file = 'merged_files.json'
+        ##output_file = 'merged_files.json'
         ##helpers.merge_json(input_files, output_file)
 
-        f = open('merged_file.json')
+        ##f = open('merged_file.json')
 
         ##data = json.load(f)
 
@@ -78,9 +76,7 @@ def results():
             year_list = request.form.getlist('selectedYears')
             print(year_list)
 
-
-
-        return render_template("results.html")
+        return render_template("years.html")
 
     if request.method == "POST":
         selected_years = request.form.getlist('selectedYear')

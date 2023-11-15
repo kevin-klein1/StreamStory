@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Main
+Homepage
 {% endblock %}
 
 
@@ -10,52 +10,50 @@ Main
 
 <!--Create first container Introduction-->
 <div class="font_fade container">
-    <div class="text_border">
-        <h1  class="title">
-            Welcome to 
-        </h1>
-        <h1 class="font_italic">
-            StreamStory!
-        </h1>
-    </div>
+  <div class="text_border">
+    <h1  class="title">
+    	Welcome to 
+    </h1>
+    <h1 class="font_italic">
+      StreamStory!
+    </h1>
+</div>
 
-    <p style="padding: 30px;">
-        A look through the years at your Spotify streaming history.
-    </p>
+	<p class="intro_para">
+		A look through the years at your Spotify streaming history.
+	</p>
 </div>
 
 
 <!--Second Section with explanation and submission form-->
-<div class="font_fade container2" style="background-color: rgb(39, 2, 63);">
+<div class="font_fade container2">
 
-    <div class="para">
-        Here's how it works:
-    </div>
-    <!--Here explain process-->
-    <p class="para2">
-        1) Request your extended history from Spotify <a href="https://www.spotify.com/us/account/privacy" style="color:#CFF56A;">here</a>. 
-        <p class="para2">Spotify will send you a zip file with your data within 5-7 days. </p>
-        <p class="para2">You will recieve JSON files with all your data.</p>
-    </p>
+	<div class="para">
+    Here's how it works:
+	</div>
+<!--Here explain process: Why doesn't the para2 cascade below?-->
+	<p class="para2">
+    1) Request your extended history from Spotify <a href="https://www.spotify.com/us/account/privacy" class="green">here</a>. 
+    <p class="para2">Spotify will send you a zip file with your data within 5-7 days. </p>
+    <p class="para2">You will recieve JSON files with all your data.</p>
+	</p>
 
-    <p class="para2" style="padding-top: 20px;"> 2) Drag and drop your JSON files below:</p>
+	<p class="para3"> 2) Drag and drop your JSON files below:</p>
 
 
-    <!--Form area for submission of data-->
-    <form id="uploadForm"  enctype="multipart/form-data" method="post">
+<!--Form area for submission of data-->
+	<form id="uploadForm"  enctype="multipart/form-data" method="post">
+    <div id="drop-area" class="drop_area">
         <input type="file" id="fileInput" name="file" style="display:none;" accept=".json" multiple>
-        <div id="drop-area" id="fileInput2" type="file" style="border: 2px dashed #CFF56A; text-align: center; padding: 20px; background-color: rgb(228, 175, 228); color: #070707; font-family: Mori; margin-top: 40px;">
-            <input type="hidden" id="fileInput" name="file" style="display:none;" accept=".json" multiple>
-            <div id="file-list" style="font-family:Right_Norm; text-align: left; display: none;">
-                <button id="delete" class="button_hover" style="float:right">delete</button>
-            </div>
-            Drag & Drop Files Here or <a href="#" type="file" id="browseButton">Browse</a>
+        <div id="file-list" class="file_list">
+  
         </div>
-
-        <button class="but pointer" type="submit" name="fileInput" id="submitBtn" style="display: none; border-radius: 12px; margin:20px; font-family: Right_Light;">Submit Files</button>
-        
-    </form>
+        Drag & Drop Files Here or <a class="pointer" id="browseButton">Browse</a>
+    </div>
+    <button class="button pointer" type="submit" id="submitBtn">Submit Files</button>
     
+</form>
+
 </div>
 
 
