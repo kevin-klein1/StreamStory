@@ -165,11 +165,6 @@ def artists():
             else: 
                 favs[artist] = 1
 
-            if (song, artist) in songs:
-                songs[(song, artist)] += 1
-            else:
-                songs[(song, artist)] = 1
-
             
         ## Sort Artists for Top Ten    
         sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
