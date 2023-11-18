@@ -110,6 +110,7 @@ def filter():
     if request.method == "POST":
         selected_option = request.form['selection']
         if selected_option == "artists":
+            session['path'] = 
             print(selected_option)
             return redirect("/artists")
         elif selected_option == "songs":
