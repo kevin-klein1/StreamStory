@@ -21,7 +21,7 @@ def merge_json(files, output_file):
     with open(output_file, 'w') as f:
         json.dump(merged_data, f)
 
-
+'''
 ## Get Token from Spotify API
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -87,27 +87,28 @@ client_secret = os.getenv("CLIENT_SECRET")
 
 token = get_token()
 print(token)
-
+'''
 
 
 # Merge JSON files
 # Replace with actual file names
-input_files = ['json_files/Spotify_History_Audio_2016-2018_1.json']
-output_file = 'merged_file.json'
-merge_json(input_files, output_file)
+##input_files = ['json_files/Spotify_History_Audio_2016-2018_1.json']
+##output_file = 'merged_file.json'
+##merge_json(input_files, output_file)
 
 
 ## Create file variable
-f = open('merged_file.json')
+##f = open('merged_file.json')
 
 ##Load file into a data object
-data = json.load(f)
+##data = json.load(f)
 
 
 ## Set up empty dictionaries
 favs = {}
 songs = {}
 
+'''
 while True: 
     try: 
         year = int(input("Please enter a year: "))
@@ -117,9 +118,10 @@ while True:
         print("Please Enter A Valid Year")
 
 print()
+'''
 
 
-
+'''
 for i in data:
     time_string = i['ts']
     date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
@@ -188,3 +190,4 @@ for (song, artist), number in list(convert_songs.items())[:10]:
 
 f.close()
 
+'''

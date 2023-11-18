@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
               
     let fadeElement1 = document.getElementsByClassName('font_fade');
     let fadeElement2 = document.getElementsByClassName('body_fade');
+
+  
     
     function fadeIn1() {
         for (let i = 0; i < fadeElement1.length; i++) {
@@ -15,17 +17,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
-      function fadeIn3() {
-        let fadeElement3 = document.getElementsByClassName('twosec_font_fade');
-      
-        for (let i = 0; i < fadeElement3.length; i++) {
-          (function(i) {
-            setTimeout(function() {
-              fadeElement3[i].style.opacity = 1;
-            }, i * 100); // Adjust the delay (1000 milliseconds = 1 second in this example)
-          })(i);
-        }
-      }
+
+function fadeIn3() {
+  let fadeElement3 = document.getElementsByClassName('twosec_font_fade');
+  let fadeElement4 = document.getElementById('AllHist');
+
+  for (let i = 0; i < fadeElement3.length; i++) {
+    (function(i) {
+      setTimeout(function() {
+        fadeElement3[i].style.opacity = 1;
+      }, i * 100);
+    // Adjust the delay (1000 milliseconds = 1 second in this example)
+    })(i);
+  }
+
+setTimeout(function() {
+  fadeElement4.style.opacity = 1;
+  }, fadeElement3.length * 100); // Use a timeout that accommodates the total delay of the loop
+}
+
       
       
       

@@ -69,8 +69,11 @@ form {
 
 /* Class tags */
 
+
+
 .intro_para {
   padding: 30px;
+  margin-top: 10px;
 }
 
 .right, .years_title {
@@ -84,7 +87,7 @@ form {
 
 
 
-.nav-link {
+.nav-item, .nav-link {
   color:#3e034f
 }
 
@@ -148,6 +151,11 @@ form {
       transition: opacity .5s;
   }
 
+  .years_fade {
+    opacity: 0;
+    transition: opacity 2s;
+  }
+
 
 
 
@@ -192,9 +200,8 @@ form {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Set to 100% of the viewport height */
   margin-top: 10px;
-  margin-bottom: -100px;
+  min-height: 90%;
 }
 
 .container2 {
@@ -202,10 +209,10 @@ form {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90%; /* Set to 100% of the viewport height */
+  min-height: 80%;
   margin-top: 10px;
-  margin-bottom: -100px;
   background-color: rgb(39, 2, 63);
+
 }
 
 
@@ -269,6 +276,41 @@ form {
       background-repeat: no-repeat; /* This will prevent the image from repeating */
       /* Add any other custom styles for the container */
 }
+
+
+.filter_button {
+  border: none; 
+  vertical-align: top;
+  background-color: transparent;
+}
+
+.filter_button:focus, a:focus {
+  border: none; 
+  outline:none;
+  vertical-align: top;
+  background-color: transparent;
+}
+
+
+
+.filter_button_img {
+  width:300px; 
+  border: none;
+  padding: 20px;
+}
+
+.filter_button_img:active {
+  width:300px; 
+  border: none;
+  padding: 20px;
+  opacity: .6;
+}
+
+.filter_button_img:hover {
+  width:310px; 
+  padding: 0px;
+}
+
 
 
 
