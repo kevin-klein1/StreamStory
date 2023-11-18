@@ -21,7 +21,7 @@ def merge_json(files, output_file):
     with open(output_file, 'w') as f:
         json.dump(merged_data, f)
 
-'''
+
 ## Get Token from Spotify API
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -85,9 +85,12 @@ load_dotenv()
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 
+print(client_id)
+print(client_secret)
+
 token = get_token()
 print(token)
-'''
+
 
 
 # Merge JSON files
