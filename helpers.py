@@ -21,7 +21,7 @@ def merge_json(files, output_file):
     with open(output_file, 'w') as f:
         json.dump(merged_data, f)
 
-
+'''
 ## Get Token from Spotify API
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -84,113 +84,7 @@ def search_for_artist(token, artist_name, field):
 load_dotenv()
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
-
-print(client_id)
-print(client_secret)
-
-token = get_token()
-print(token)
-
-
-
-# Merge JSON files
-# Replace with actual file names
-##input_files = ['json_files/Spotify_History_Audio_2016-2018_1.json']
-##output_file = 'merged_file.json'
-##merge_json(input_files, output_file)
-
-
-## Create file variable
-##f = open('merged_file.json')
-
-##Load file into a data object
-##data = json.load(f)
-
-
-## Set up empty dictionaries
-favs = {}
-songs = {}
-
-'''
-while True: 
-    try: 
-        year = int(input("Please enter a year: "))
-        if year > 2010 and year <= 2023:
-            break
-    except ValueError:
-        print("Please Enter A Valid Year")
-
-print()
 '''
 
 
-'''
-for i in data:
-    time_string = i['ts']
-    date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
 
-    
-    
-
-    if year != date_object.year:
-        continue
-    
-    song = i['master_metadata_track_name']
-    date = i['ts']
-    artist = i['master_metadata_album_artist_name']
-    if artist == None or artist == "Valleyheart":
-        continue
-
-    if artist in favs:
-        favs[artist] += 1
-    else: 
-        favs[artist] = 1
-
-    if (song, artist) in songs:
-        songs[(song, artist)] += 1
-    else:
-        songs[(song, artist)] = 1
-
-    
-## Sort Artists for Top Ten    
-sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
-convert_favs = dict(sorted_favs)
-
-## Sort Songs
-
-sorted_songs = sorted(songs.items(), key=lambda x:x[1], reverse=True)
-convert_songs = dict(sorted_songs)
-
-
-
-
-counter = 0
-print(f"Your Top Ten Artists are:")
-print()
-for artist in convert_favs:
-    print(artist)
-    search_for_artist_pic(token, artist)
-    counter += 1
-    if counter == 10:
-        break 
-print()
-
-counter_songs = 0
-print("Your Top Songs We're:")
-print()
-for song in convert_songs:
-    print(f"{song[0]} by {song[1]}")
-    counter_songs += 1
-    if counter_songs == 10:
-        break 
-print()
-print()
-for artist, number in list(convert_favs.items())[:10]:
-    print(f"You streamed {artist} this many times: {number}")
-print()
-for (song, artist), number in list(convert_songs.items())[:10]:
-    print(f"You streamed {song} by {artist} this many times: {number}")
-
-f.close()
-
-'''

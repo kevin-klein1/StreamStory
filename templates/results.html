@@ -8,11 +8,23 @@ Page
 
 {% block main %}
 
-<p>
-    hi!
-</p>
+    <div class="container">
+    <h1"> Your Top {{ path }} for {% for year in years %}
+        {% if loop.last %}
+            {{ year }}:
+        {% else %}
+            {{ year }},
+        {% endif %}
+    {% endfor %}</h1>
+    <ul>
+        {% for i in data %}
+        <li>
+            {{ i }}
+        </li>
+        {% endfor %}
 
-<p>
-    tester
-</p>
+        
+    </ul>
+</div>
+
 {% endblock %}

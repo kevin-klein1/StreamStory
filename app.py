@@ -109,33 +109,25 @@ def filter():
 
     if request.method == "POST":
         selected_option = request.form['selection']
-        if selected_option == "artists":
-            session['path'] = 
-            print(selected_option)
-            return redirect("/artists")
-        elif selected_option == "songs":
-            print(selected_option)
-            return redirect("/songs")
-        elif selected_option == "albums":
-            print(selected_option)
-            return redirect("/albums")
-        else:
-            return ("Error")
+        session['path'] = selected_option
+        print(session['path'])
+        return redirect("/results")
+    else:
+        return render_template ("error.html")
         
     
 
-@app.route("/artists")
-def artists():
+@app.route("/results")
+def results():
     if request.method == "GET":
         favs = {}
         songs = {}
+        albums = {}
+
         folder_path = os.path.join(app.root_path, 'json_files')
         input_files = os.listdir(folder_path)
 
         input_file_paths = [os.path.join(folder_path, file) for file in input_files]
-
-
-
      
         output_file = 'merged_file.json'
         helpers.merge_json(input_file_paths, output_file)
@@ -150,14 +142,21 @@ def artists():
         
 
             date_object_str = str(date_object.year)
-            print(type(date_object_str))
-            print(session['selected_years'])
 
+
+            counter_years = 0
             if date_object_str not in session['selected_years']:
-                print("wow")
+                counter_years += 1
+                if counter_years >= len(data):
+                    message = "No data for these years"
+                    return render_template("error.html", message=message)
                 continue
 
+            ## Set up json artist, song, album variables
             artist = i['master_metadata_album_artist_name']
+            song = i['master_metadata_track_name']
+            album = i['master_metadata_album_album_name']
+
             if artist == None or artist == "Valleyheart":
                 continue
 
@@ -166,44 +165,87 @@ def artists():
             else: 
                 favs[artist] = 1
 
+            ## Song Dict set up
+            if (song, artist) in songs:
+                songs[(song, artist)] += 1
+            else:
+                songs[(song, artist)] = 1
+
+            ## Album Dict set up
+            if (album, artist) in albums:
+                albums[(album, artist)] += 1
+            else:
+                albums[(album, artist)] = 1
+
+        if session['path'] == "artists":
+            ##path variable for jinja
+            path = "Artists"
+            ## Sort Artists for Top Ten    
+            sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
+            convert_favs = dict(sorted_favs)
+
+            counter = 0
+            print(f"Your Top Ten Artists are:")
+        
+            print()
+            for artist in convert_favs:
+                print(artist)
+                ##search_for_artist_pic(token, artist)
+                counter += 1
+                if counter == 10:
+                    break 
+            print()
+            for artist, number in list(convert_favs.items())[:10]:
+                print(f"You streamed {artist} this many times: {number}")
+            data_final = convert_favs
+        
+        if session['path'] == "songs":
+            path = "Songs"
+            sorted_songs = sorted(songs.items(), key=lambda x:x[1], reverse=True)
+            convert_songs = dict(sorted_songs)
+
+            counter_songs = 0
+            print("Your Top Songs We're:")
+            print()
+            for song in convert_songs:
+                print(f"{song[0]} by {song[1]}")
+                counter_songs += 1
+                if counter_songs == 10:
+                    break 
+            print()
             
-        ## Sort Artists for Top Ten    
-        sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
-        convert_favs = dict(sorted_favs)
+            print()
+            for (song, artist), number in list(convert_songs.items())[:10]:
+                print(f"You streamed {song} by {artist} this many times: {number}")
+            data_final = convert_songs
 
 
+        if session['path'] == "albums":
+            path = "Albums"
+            sorted_albums = sorted(albums.items(), key=lambda x:x[1], reverse=True)
+            convert_albums = dict(sorted_albums)
 
-        counter = 0
-        print(f"Your Top Ten Artists are:")
-        print()
-        for artist in convert_favs:
-            print(artist)
-            ##search_for_artist_pic(token, artist)
-            counter += 1
-            if counter == 10:
-                break 
-        print()
+            counter_album = 0
+            print("Your Top Albums Were:")
+            print()
+            for (album, artist) in convert_albums:
+                print(f"{album} by {artist}")
+                counter_album += 1
+                if counter_album == 10:
+                    break 
+            print()
+            
+            print()
+            for (album, artist), number in list(convert_albums.items())[:10]:
+                print(f"You streamed {album} by {artist} this many times: {number}")
+            data_final = convert_albums
 
-        counter_songs = 0
 
-        for artist, number in list(convert_favs.items())[:10]:
-            print(f"You streamed {artist} this many times: {number}")
 
         f.close()
+        return render_template('results.html',path=path,years=session['selected_years'], data=data_final)
+    
 
-
-        return render_template('artists.html')
-    
-@app.route("/songs")
-def songs():
-    return render_template('songs.html')
-   
-    
-@app.route("/albums")
-def albums():
-    return render_template('albums.html')
-   
-    
     
 
 if __name__ == '__main__':
