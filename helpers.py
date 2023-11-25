@@ -21,7 +21,7 @@ def merge_json(files, output_file):
     with open(output_file, 'w') as f:
         json.dump(merged_data, f)
 
-'''
+
 ## Get Token from Spotify API
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -53,7 +53,8 @@ def search_for_artist_pic(token, artist_name):
     query_url = url + "?" + query
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)['artists']['items']
-    print(json_result[0]['images'][0]['url'])
+    result = json_result[0]['images'][0]['url']
+    return result
 
 def search_for_artist_id(token, artist_name):
     url = "https://api.spotify.com/v1/search"
@@ -84,7 +85,4 @@ def search_for_artist(token, artist_name, field):
 load_dotenv()
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
-'''
-
-
 

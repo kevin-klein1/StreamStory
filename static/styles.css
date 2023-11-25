@@ -179,7 +179,7 @@ form {
   text-decoration: underline;
   text-decoration-style:solid;
   text-decoration-thickness: 2px;
-  text-shadow: 4px 1px rgb(82, 59, 85);
+
 
 
 }
@@ -195,7 +195,7 @@ form {
   padding-top: 20px;
 }
 
-.container {
+.container, .container2, .container3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -205,16 +205,21 @@ form {
 }
 
 .container2 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   min-height: 80%;
-  margin-top: 10px;
   background-color: rgb(39, 2, 63);
-
 }
 
+.container3 {
+  justify-content: s
+}
+
+.image_result {
+  width: 200px; 
+  height: 200px; 
+  padding-bottom:2px; 
+  object-fit: cover; 
+
+}
 
 .padding {
 

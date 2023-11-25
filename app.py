@@ -7,6 +7,7 @@ import datetime
 from dotenv import load_dotenv
 import base64
 import helpers
+import asyncio
 
 
 ## Create the routing connection for uploading json files
@@ -23,9 +24,9 @@ app.secret_key = '1234'
 
 
 
-
 ## Config upload path
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023']
 Filter = ['artist', 'songs', 'album']
@@ -120,9 +121,19 @@ def filter():
 @app.route("/results")
 def results():
     if request.method == "GET":
+        
+        ##token = helpers.get_token()
         favs = {}
         songs = {}
         albums = {}
+
+        ##print(token)
+        print('YOOOOOOO')
+
+
+        results = {}
+
+        ## get token function I just want to call once and get that token! 
 
         folder_path = os.path.join(app.root_path, 'json_files')
         input_files = os.listdir(folder_path)
@@ -157,7 +168,7 @@ def results():
             song = i['master_metadata_track_name']
             album = i['master_metadata_album_album_name']
 
-            if artist == None or artist == "Valleyheart":
+            if artist == None or artist == "Valleyheart" or artist == "Kevin Klein":
                 continue
 
             if artist in favs:
@@ -189,15 +200,18 @@ def results():
         
             print()
             for artist in convert_favs:
-                print(artist)
-                ##search_for_artist_pic(token, artist)
+        
+                ##artist_pic = helpers.search_for_artist_pic(token, artist)
+                artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
+                results[artist] = artist_pic
                 counter += 1
                 if counter == 10:
                     break 
             print()
+
+
             for artist, number in list(convert_favs.items())[:10]:
                 print(f"You streamed {artist} this many times: {number}")
-            data_final = convert_favs
         
         if session['path'] == "songs":
             path = "Songs"
@@ -207,8 +221,12 @@ def results():
             counter_songs = 0
             print("Your Top Songs We're:")
             print()
-            for song in convert_songs:
-                print(f"{song[0]} by {song[1]}")
+            for (song, artist) in convert_songs:
+                print(artist)
+                print(song)
+                artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
+                ##artist_pic = helpers.search_for_artist_pic(token, artist)
+                results[(song, artist)] = artist_pic
                 counter_songs += 1
                 if counter_songs == 10:
                     break 
@@ -228,22 +246,26 @@ def results():
             counter_album = 0
             print("Your Top Albums Were:")
             print()
-            for (album, artist) in convert_albums:
-                print(f"{album} by {artist}")
+            for (album, artist), number in convert_albums.items():
+
+                ##artist_pic = helpers.search_for_artist_pic(token, artist)
+                artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
+                results[(album,artist,number)] = artist_pic
+                print(number)
                 counter_album += 1
                 if counter_album == 10:
                     break 
             print()
-            
+       
             print()
-            for (album, artist), number in list(convert_albums.items())[:10]:
-                print(f"You streamed {album} by {artist} this many times: {number}")
+            for artist, number in list(convert_albums.items())[:10]:
+                print(f"You streamed {artist[0]} by {artist[1]} this many times: {number}")
             data_final = convert_albums
 
 
 
         f.close()
-        return render_template('results.html',path=path,years=session['selected_years'], data=data_final)
+        return render_template('results.html',path=path,years=session['selected_years'], results=results)
     
 
     

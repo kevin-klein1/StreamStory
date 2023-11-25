@@ -8,19 +8,29 @@ Page
 
 {% block main %}
 
-    <div class="container">
-    <h1"> Your Top {{ path }} for {% for year in years %}
+    <div class="container3">
+    <h1> Your Top {{ path }} for {% for year in years %}
         {% if loop.last %}
             {{ year }}:
         {% else %}
             {{ year }},
         {% endif %}
     {% endfor %}</h1>
-    <ul>
-        {% for i in data %}
+    <ul style="float:left">
+        {% for artist, pic in results.items() %}
+        {% if path == "Artists" %}
+            <li>
+                <img src="{{ pic }}" alt="artist_pic" class="image_result"> - {{ artist }}
+                <br>
+                You streamed {{ artist }} 
+            </li>
+        {% else %}
         <li>
-            {{ i }}
+            <img src="{{ pic }}" alt="artist_pic" class="image_result"> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [1]}} {{ artist [2]}} times.
         </li>
+        <br>
+
+        {% endif %}
         {% endfor %}
 
         
