@@ -8,11 +8,17 @@ from dotenv import load_dotenv
 import base64
 import helpers
 import asyncio
+import time
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+
+
 
 
 ## Create the routing connection for uploading json files
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'json_files')
-MAIN_FOLDER = os.path.join(os.getcwd(), 'json_files')
+## MAIN_FOLDER = os.path.join(os.getcwd(), 'json_files')
 
 ALLOWED_EXT = {'json'}
 
@@ -50,16 +56,15 @@ def index():
     if request.method == "GET":
         ## Delete all the json files in directory to start fresh each upload
         ##token = helpers.get_token()
+        if not os.path.exists(UPLOAD_FOLDER):
+            os.mkdir(UPLOAD_FOLDER)
+
         for filename in os.listdir(UPLOAD_FOLDER):
             file_path = os.path.join(UPLOAD_FOLDER, filename)
-            try:
-                os.unlink(file_path)
-            except Exception as e:
-                flash(f"Error deleting file: {e}", 'error')
-                return redirect(request.url)
+            os.unlink(file_path)
             
         if os.path.exists('merged_file.json'):
-            os.remove('merged_file.json')
+            os.unlink('merged_file.json')
 
         return render_template("index.html")
     if request.method == "POST":
@@ -121,17 +126,19 @@ def filter():
 @app.route("/results")
 def results():
     if request.method == "GET":
+       
         
         ##token = helpers.get_token()
+        ##token = "BQCm2UBLKqClfuUhXB7FeRZsb2QQfBIOxhpyA-eq18qKusdxFwgN-Yh3Q7o_xgP7Q8gLtgEhwCH8_nfi2D_WtEcdPC6b40LHVwOrDC0n7aMXvMlzyJM"
+        ##print(token)
+        ## print("--- %s seconds ---" % (time.time() - start))
+
+        ## Move things closer to when used. 
         favs = {}
         songs = {}
         albums = {}
 
         ##print(token)
-        print('YOOOOOOO')
-
-
-        results = {}
 
         ## get token function I just want to call once and get that token! 
 
@@ -143,22 +150,21 @@ def results():
         output_file = 'merged_file.json'
         helpers.merge_json(input_file_paths, output_file)
 
-
+        ## chat about redundacy
         f = open('merged_file.json')
         data = json.load(f)
 
         for i in data:
             time_string = i['ts']
             date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
-        
 
             date_object_str = str(date_object.year)
 
-
+            ## Discuss
             counter_years = 0
             if date_object_str not in session['selected_years']:
                 counter_years += 1
-                if counter_years >= len(data):
+                if counter_years == len(data):
                     message = "No data for these years"
                     return render_template("error.html", message=message)
                 continue
@@ -171,6 +177,7 @@ def results():
             if artist == None or artist == "Valleyheart" or artist == "Kevin Klein":
                 continue
 
+            ## Default Dict
             if artist in favs:
                 favs[artist] += 1
             else: 
@@ -188,30 +195,34 @@ def results():
             else:
                 albums[(album, artist)] = 1
 
+        results = {}
+        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
         if session['path'] == "artists":
             ##path variable for jinja
             path = "Artists"
             ## Sort Artists for Top Ten    
             sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
+            ##print(type(sorted_favs))
             convert_favs = dict(sorted_favs)
 
             counter = 0
             print(f"Your Top Ten Artists are:")
         
             print()
-            for artist in convert_favs:
-        
-                ##artist_pic = helpers.search_for_artist_pic(token, artist)
-                artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
-                results[artist] = artist_pic
+            for artist, number in convert_favs.items():
+                start = time.time()
+                artist_info = helpers.search_for_pic(spotify, artist)
+                print("--- Artists: %s seconds ---" % (time.time() - start))
+                ##artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
+                results[artist, number] = artist_info
                 counter += 1
                 if counter == 10:
                     break 
             print()
 
 
-            for artist, number in list(convert_favs.items())[:10]:
-                print(f"You streamed {artist} this many times: {number}")
+            # for artist, number in list(convert_favs.items())[:10]:
+            #     print(f"You streamed {artist} this many times: {number}")
         
         if session['path'] == "songs":
             path = "Songs"
@@ -221,12 +232,9 @@ def results():
             counter_songs = 0
             print("Your Top Songs We're:")
             print()
-            for (song, artist) in convert_songs:
-                print(artist)
-                print(song)
-                artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
-                ##artist_pic = helpers.search_for_artist_pic(token, artist)
-                results[(song, artist)] = artist_pic
+            for (song, artist), number in convert_songs.items():
+                artist_info = helpers.search_for_pic(spotify, artist)
+                results[(song, artist, number)] = artist_info
                 counter_songs += 1
                 if counter_songs == 10:
                     break 
@@ -247,13 +255,14 @@ def results():
             print("Your Top Albums Were:")
             print()
             for (album, artist), number in convert_albums.items():
-
-                ##artist_pic = helpers.search_for_artist_pic(token, artist)
-                artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
-                results[(album,artist,number)] = artist_pic
-                print(number)
+                artist_info = helpers.search_for_pic(spotify, artist)
+                album_info = helpers.search_for_album(spotify, artist_info[1])
+                print('album results:')
+                print(album_info)
+                ##artist_info = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
+                results[(album,artist,number)] = artist_info
                 counter_album += 1
-                if counter_album == 10:
+                if counter_album == 1:
                     break 
             print()
        

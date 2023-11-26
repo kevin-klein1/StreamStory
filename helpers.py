@@ -6,6 +6,9 @@ import os
 import base64
 
 
+
+
+
 ## Define Functions
 
 
@@ -45,25 +48,59 @@ def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
 
-## Function that searches the image of a given artist using API - Returns a http pic
-def search_for_artist_pic(token, artist_name):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"q={artist_name}&type=artist&limit=1"
-    query_url = url + "?" + query
-    result = get(query_url, headers=headers)
-    json_result = json.loads(result.content)['artists']['items']
-    result = json_result[0]['images'][0]['url']
-    return result
 
-def search_for_artist_id(token, artist_name):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"q={artist_name}&type=artist&limit=1"
-    query_url = url + "?" + query
-    result = get(query_url, headers=headers)
-    json_result = json.loads(result.content)['artists']['items']
-    print(json_result[0]['id'])
+
+
+## Function that searches the image of a given artist using API - Returns a http pic
+# def search_for_artist_pic(token, artist_name):
+#     url = "api.spotify.com"
+#     headers = get_auth_header(token)
+#     query = f"/v1/searchq={artist_name}&type=artist&limit=1"
+#     query_url = url + "?" + query
+#     c.request('GET', query_url, headers=headers)
+
+#     resp = c.get_response()
+#     # print(query_url)
+#     # result = get(query_url, headers=headers)
+#     # if result.ok:
+#     #     print("This worked")
+#     ##json_result = json.loads(result.content)['artists']['items']
+#     ##result = json_result[0]['images'][0]['url']
+#     return resp
+
+
+def search_for_pic(spotify, artist):
+    results = spotify.search(q='artist:' + artist, type='artist')
+    items = results['artists']['items']
+    if len(items) > 0:
+        artist = items[0]
+        id = artist['id']
+        result = artist['images'][0]['url']
+        return result, id
+
+
+def search_for_album(spotify, id): 
+    artist_uri = "spotify:artist:" + id
+    results = spotify.artist_albums(artist_uri, album_type='album')
+    return results
+
+
+
+
+
+
+
+
+
+
+# def search_for_artist_id(token, artist_name):
+#     url = "https://api.spotify.com/v1/search"
+#     headers = get_auth_header(token)
+#     query = f"q={artist_name}&type=artist&limit=1"
+#     query_url = url + "?" + query
+#     result = get(query_url, headers=headers)
+#     json_result = json.loads(result.content)['artists']['items']
+#     print(json_result[0]['id'])
 
 
 

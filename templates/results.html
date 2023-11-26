@@ -20,13 +20,13 @@ Page
         {% for artist, pic in results.items() %}
         {% if path == "Artists" %}
             <li>
-                <img src="{{ pic }}" alt="artist_pic" class="image_result"> - {{ artist }}
+                <img src="{{ pic[0] }}" alt="artist_pic" class="image_result"> - {{ artist [0] }}
                 <br>
-                You streamed {{ artist }} 
+                You streamed {{ artist [0] }} {{ artist [1] }} times.
             </li>
         {% else %}
         <li>
-            <img src="{{ pic }}" alt="artist_pic" class="image_result"> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [1]}} {{ artist [2]}} times.
+            <img src="{{ pic[0] }}" alt="artist_pic" class="image_result"> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [0]}} {{ artist [2]}} times.
         </li>
         <br>
 
