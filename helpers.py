@@ -25,98 +25,49 @@ def merge_json(files, output_file):
         json.dump(merged_data, f)
 
 
-## Get Token from Spotify API
-def get_token():
-    auth_string = client_id + ":" + client_secret
-    auth_bytes = auth_string.encode("utf-8")
-    auth_base_64 = str(base64.b64encode(auth_bytes), "utf-8")
-    url = "https://accounts.spotify.com/api/token"
-    headers = {
-        "Authorization": "Basic " + auth_base_64,
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-
-    data = {"grant_type": "client_credentials"}
-
-    result = post(url, headers=headers, data=data)
-    json_result = json.loads(result.content)
-    token = json_result["access_token"]
-    return token
-
-## Get the request format with token
-def get_auth_header(token):
-    return {"Authorization": "Bearer " + token}
-
-
-
-
-
-## Function that searches the image of a given artist using API - Returns a http pic
-# def search_for_artist_pic(token, artist_name):
-#     url = "api.spotify.com"
-#     headers = get_auth_header(token)
-#     query = f"/v1/searchq={artist_name}&type=artist&limit=1"
-#     query_url = url + "?" + query
-#     c.request('GET', query_url, headers=headers)
-
-#     resp = c.get_response()
-#     # print(query_url)
-#     # result = get(query_url, headers=headers)
-#     # if result.ok:
-#     #     print("This worked")
-#     ##json_result = json.loads(result.content)['artists']['items']
-#     ##result = json_result[0]['images'][0]['url']
-#     return resp
-
-
-def search_for_pic(spotify, artist):
+def search_for_artist_info(spotify, artist):
     results = spotify.search(q='artist:' + artist, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
         artist = items[0]
         id = artist['id']
         result = artist['images'][0]['url']
-        return result, id
+        uri = artist['uri']
+        return result, id, uri 
 
 
-def search_for_album(spotify, id): 
+def search_for_album(spotify, id, album): 
     artist_uri = "spotify:artist:" + id
     results = spotify.artist_albums(artist_uri, album_type='album')
-    return results
+    albums_list = results['items']
+    for record in albums_list:
+        current_album_name = record['name']
+        ##print()
+        ##print(f"{current_album_name} == {album}")
+        ##print()
+        current_album_name = current_album_name.lower()
+        if album.lower() == current_album_name:
+            return record['images'][0]['url'], record['uri'], record['id']
+        elif album.lower() in current_album_name:
+            if "live" or "deluxe" in current_album_name:
+                continue
+            return record['images'][0]['url'], record['uri'], record['id']
+        else:
+            continue
+    return None
 
 
 
-
-
-
-
-
-
-
-# def search_for_artist_id(token, artist_name):
-#     url = "https://api.spotify.com/v1/search"
-#     headers = get_auth_header(token)
-#     query = f"q={artist_name}&type=artist&limit=1"
-#     query_url = url + "?" + query
-#     result = get(query_url, headers=headers)
-#     json_result = json.loads(result.content)['artists']['items']
-#     print(json_result[0]['id'])
-
-
-
-
-##Function that takes the field as a parameter so you don't have to create different functions
-## something to beware of here - some values are inside lists and other dictionaries etc. 
-
-def search_for_artist(token, artist_name, field):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"q={artist_name}&type=artist&limit=1"
-    query_url = url + "?" + query
-    result = get(query_url, headers=headers)
-    json_result = json.loads(result.content)['artists']['items']
-    print(json_result[0][field])
-
+def search_song_uri(spotify, album_id, song):
+    result = spotify.album_tracks(album_id)
+    tracks = result['items']
+    for track_object in tracks:
+        track_name = track_object['name']
+        if song.lower() == track_name.lower():
+            return track_object['uri']
+        else:
+            continue
+    return None
 
 ## load enviroment varialbes
 load_dotenv()

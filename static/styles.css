@@ -9,6 +9,7 @@ p {
 }
 
 
+
 html, body {
   height: 100%;
   margin: 0;
@@ -24,11 +25,28 @@ form {
   display: contents;
 }
 
+a:hover {
+  text-decoration: none;
+  color: rgb(142, 81, 157);
+
+}
+
+
 /* Cursors */
 
 .pointer {
   cursor: pointer;
 }
+
+h1 {
+
+  color: white;
+}
+
+a {
+  text-decoration: none !important;
+}
+
 
 
 /* ID tags */
@@ -195,7 +213,7 @@ form {
   padding-top: 20px;
 }
 
-.container, .container2, .container3 {
+.container, .container2 {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -210,14 +228,24 @@ form {
 }
 
 .container3 {
-  justify-content: s
+  justify-content: left;
+  margin-left: 50px;
+  margin-top: 10px;
 }
 
 .image_result {
-  width: 200px; 
-  height: 200px; 
-  padding-bottom:2px; 
+  width: 300px; 
+  height: 300px; 
+  padding-bottom:0px; 
   object-fit: cover; 
+
+}
+
+.image_result:hover {
+  border-color: #27c764;
+  border-style: solid;
+  border-width: 4px;
+  margin-bottom: 0px;
 
 }
 
@@ -314,6 +342,10 @@ form {
 .filter_button_img:hover {
   width:310px; 
   padding: 0px;
+}
+
+.releae_title {
+  font-family: Right_Norm;
 }
 
 

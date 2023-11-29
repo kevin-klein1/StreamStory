@@ -5,19 +5,13 @@ Page
 {% endblock %}
 
 
-
 {% block main %}
 <div class="container">
     <p class="error-message">
         {{ message }}
     </p>
-    <p class="error-message" style="color: rgb(142, 81, 157);">
-        Let's try again!
         <br>
-        <a class="green" style="font-size: 30px;"href="/">Back to Homepage</a>
-    </p>
-    <p>
-        hi
+        <a class="green" style="font-size: 30px;"href="/years">Back to {{ path }}</a>
     </p>
 </div>
 

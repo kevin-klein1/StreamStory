@@ -9,24 +9,36 @@ Page
 {% block main %}
 
     <div class="container3">
-    <h1> Your Top {{ path }} for {% for year in years %}
+    <h1 style="color: black; font-family: Right_Norm; text-decoration: underline #e4fba1; padding-bottom: 60px;;"> Your Top {{ path }} for {% for year in years %}
         {% if loop.last %}
             {{ year }}:
         {% else %}
             {{ year }},
         {% endif %}
     {% endfor %}</h1>
-    <ul style="float:left">
+    <ul>
         {% for artist, pic in results.items() %}
         {% if path == "Artists" %}
             <li>
-                <img src="{{ pic[0] }}" alt="artist_pic" class="image_result"> - {{ artist [0] }}
+                <a class="uri" href="{{ artist[2] }}">
+                <img src="{{ pic }}" alt="artist_pic" class="image_result"> 
+                </a>  - {{ artist [0] }}
                 <br>
                 You streamed {{ artist [0] }} {{ artist [1] }} times.
+               
             </li>
+            <br>
+        {% elif path == "Songs" %}
+            <li>
+                <a class="uri" href="{{ artist[3] }}">
+                <img src="{{ pic }}" alt="artist_pic" class="image_result"> </a> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [0]}} {{ artist [2]}} times.
+            </li>
+            <br>
+
         {% else %}
         <li>
-            <img src="{{ pic[0] }}" alt="artist_pic" class="image_result"> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [0]}} {{ artist [2]}} times.
+            <a class="uri" href="{{ artist[3] }}">
+            <img src="{{ pic }}" alt="artist_pic" class="image_result"> </a> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [0]}} {{ artist [2]}} times.
         </li>
         <br>
 

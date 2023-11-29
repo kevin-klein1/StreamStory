@@ -16,10 +16,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 
 
+
+
 ## Create the routing connection for uploading json files
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'json_files')
-## MAIN_FOLDER = os.path.join(os.getcwd(), 'json_files')
-
 ALLOWED_EXT = {'json'}
 
 
@@ -33,16 +33,18 @@ app.secret_key = '1234'
 ## Config upload path
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
+## Global lists for approved years & result path
 Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023']
-Filter = ['artist', 'songs', 'album']
+Filter = ['Artists', 'Songs', 'Albums']
 
+## Function Defs
 
 ## Function for allowed json (extra care)
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
+# Uploads users json into project
 def upload_files(files):
     for file in files:
         if allowed_file(file.filename):
@@ -54,56 +56,52 @@ def upload_files(files):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        ## Delete all the json files in directory to start fresh each upload
-        ##token = helpers.get_token()
+        ## Create json folder upon each homepage visit if not exisiting already
         if not os.path.exists(UPLOAD_FOLDER):
             os.mkdir(UPLOAD_FOLDER)
 
+        ## Delete all the json files in directory to start fresh each upload
         for filename in os.listdir(UPLOAD_FOLDER):
             file_path = os.path.join(UPLOAD_FOLDER, filename)
             os.unlink(file_path)
-            
+
+        ## Delete old JSON from any previous search
         if os.path.exists('merged_file.json'):
             os.unlink('merged_file.json')
-
         return render_template("index.html")
+    
     if request.method == "POST":
-        ## Get files from the html form
 
-        ## files from browse
+        ## Get files from browse button
         files = request.files.getlist('file')
-        ## files from drag and drop
+        ## Get files from drag and drop
         files2 = request.files.getlist('file2')
 
+        ## Upload files into project
         upload_files(files)
         upload_files(files2)
 
-       
-       
         return redirect("/years")
         
     
 @app.route("/years", methods=["GET", "POST"])
 def years():
     if request.method == "GET":
-
-        input_files = []
-        for filename in os.listdir(UPLOAD_FOLDER):
-            input_files.append("json_files/" + filename)
-
         return render_template("years.html")
 
     if request.method == "POST":
+        ## Get list of years user wants to filter
         selected_years_unconverted = request.form.getlist('selectedYears')
 
+        ## Format years correctly for comparison & store in session variable
         for year in selected_years_unconverted:
             session['selected_years'] = year.split(',')
     
+        ## Make sure years are approved years
         for year in session['selected_years']:
             if year not in Approved_years:
-                return render_template("error.html")
-        
-    
+                message = "Years not valid!"
+                return render_template("error.html", message=message,path=request.path.strip("/").title())
         return redirect("/filter")
 
 
@@ -114,9 +112,12 @@ def filter():
         return render_template("filter.html")
 
     if request.method == "POST":
+        ## Get results path selection into session variable
         selected_option = request.form['selection']
+        if selected_option not in Filter:
+            message= "Not a Valid Option!"
+            return render_template("error.html",message=message, path=request.path.strip("/").title())
         session['path'] = selected_option
-        print(session['path'])
         return redirect("/results")
     else:
         return render_template ("error.html")
@@ -126,128 +127,144 @@ def filter():
 @app.route("/results")
 def results():
     if request.method == "GET":
-       
-        
-        ##token = helpers.get_token()
-        ##token = "BQCm2UBLKqClfuUhXB7FeRZsb2QQfBIOxhpyA-eq18qKusdxFwgN-Yh3Q7o_xgP7Q8gLtgEhwCH8_nfi2D_WtEcdPC6b40LHVwOrDC0n7aMXvMlzyJM"
-        ##print(token)
-        ## print("--- %s seconds ---" % (time.time() - start))
+        ## Set up folder path to json files and get file names
+        folder_path = os.path.join(app.root_path, 'json_files')
+        input_files = os.listdir(folder_path)
 
-        ## Move things closer to when used. 
+        ## File paths for each json file 
+        input_file_paths = [os.path.join(folder_path, file) for file in input_files]
+
+        ## name output file and call merge to make one json file
+        output_file = 'merged_file.json'
+        helpers.merge_json(input_file_paths, output_file)
+
+        ## load merged file
+        f = open('merged_file.json')
+        data = json.load(f)
+
+        ## Set up empty dictionaries for results
         favs = {}
         songs = {}
         albums = {}
 
-        ##print(token)
+        ## Main for loop that goes through each object in JSON
+        for stream in data:
 
-        ## get token function I just want to call once and get that token! 
-
-        folder_path = os.path.join(app.root_path, 'json_files')
-        input_files = os.listdir(folder_path)
-
-        input_file_paths = [os.path.join(folder_path, file) for file in input_files]
-     
-        output_file = 'merged_file.json'
-        helpers.merge_json(input_file_paths, output_file)
-
-        ## chat about redundacy
-        f = open('merged_file.json')
-        data = json.load(f)
-
-        for i in data:
-            time_string = i['ts']
+            ## Get the year of stream from JSON
+            time_string = stream['ts']
             date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
+            stream_year = str(date_object.year)
 
-            date_object_str = str(date_object.year)
-
-            ## Discuss
-            counter_years = 0
-            if date_object_str not in session['selected_years']:
-                counter_years += 1
-                if counter_years == len(data):
-                    message = "No data for these years"
-                    return render_template("error.html", message=message)
+            ## Filter through years selected by user, abort loop if not found
+            if stream_year not in session['selected_years']:
                 continue
 
             ## Set up json artist, song, album variables
-            artist = i['master_metadata_album_artist_name']
-            song = i['master_metadata_track_name']
-            album = i['master_metadata_album_album_name']
+            artist = stream['master_metadata_album_artist_name']
+            song = stream['master_metadata_track_name']
+            album = stream['master_metadata_album_album_name']
 
+            ## I stream my own music to practice and dont wanna see those results hah
             if artist == None or artist == "Valleyheart" or artist == "Kevin Klein":
                 continue
 
-            ## Default Dict
+        
+            ## Artist Dictionary
             if artist in favs:
                 favs[artist] += 1
             else: 
                 favs[artist] = 1
 
-            ## Song Dict set up
-            if (song, artist) in songs:
-                songs[(song, artist)] += 1
+        
+            ## Song Dictionary
+            if (song, artist,album) in songs:
+                songs[(song, artist,album)] += 1
             else:
-                songs[(song, artist)] = 1
-
-            ## Album Dict set up
+                songs[(song, artist,album)] = 1
+   
+            ## Album Dictionary
             if (album, artist) in albums:
                 albums[(album, artist)] += 1
             else:
                 albums[(album, artist)] = 1
 
+        ## Make sure theres data in the dictionaries, if not - return error page
+        if len(favs) == 0:
+            return render_template("error.html", message="No Data for these years!", path=request.path)
+
+
+        ## Set up Top Ten Dictionary
         results = {}
+
+        ## Spotipy creds authorization library
         spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-        if session['path'] == "artists":
-            ##path variable for jinja
-            path = "Artists"
-            ## Sort Artists for Top Ten    
+
+        
+        if session['path'] == "Artists":
+            ## Sort Artists for Top Ten in sorted dict   
             sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
-            ##print(type(sorted_favs))
             convert_favs = dict(sorted_favs)
 
             counter = 0
-            print(f"Your Top Ten Artists are:")
-        
-            print()
+            ## insert top ten for artists
             for artist, number in convert_favs.items():
-                start = time.time()
-                artist_info = helpers.search_for_pic(spotify, artist)
-                print("--- Artists: %s seconds ---" % (time.time() - start))
-                ##artist_pic = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
-                results[artist, number] = artist_info
+                ## Get tuple of artist info with Spotify API call
+                artist_info = helpers.search_for_artist_info(spotify, artist)
+
+                artist_pic = artist_info[0]
+                artist_uri = artist_info[2]
+
+                ## Insert into results all info and picture
+                results[artist, number, artist_uri] = artist_pic
+
                 counter += 1
                 if counter == 10:
                     break 
-            print()
-
-
-            # for artist, number in list(convert_favs.items())[:10]:
-            #     print(f"You streamed {artist} this many times: {number}")
         
-        if session['path'] == "songs":
-            path = "Songs"
+        if session['path'] == "Songs":
+            ## Sort
             sorted_songs = sorted(songs.items(), key=lambda x:x[1], reverse=True)
             convert_songs = dict(sorted_songs)
 
+
             counter_songs = 0
-            print("Your Top Songs We're:")
-            print()
-            for (song, artist), number in convert_songs.items():
-                artist_info = helpers.search_for_pic(spotify, artist)
-                results[(song, artist, number)] = artist_info
+            ## Insert
+            for (song,artist,album), number in convert_songs.items():
+                artist_info = helpers.search_for_artist_info(spotify, artist)
+
+                artist_pic = artist_info[0]
+                artist_id = artist_info[1]
+                artist_uri = artist_info[2]
+
+                ## Some artist_info comes back empty, if that's the case abort to avoid error
+                if artist_info is None:
+                    continue
+
+                ## API call to get album information
+                album_info = helpers.search_for_album(spotify, artist_id, album)
+
+                ## Make sure this isn't Null + if it is: just display the artist picture. 
+                if album_info != None:
+
+                    # Get album info + Get Song uri link for href image link to spotify page 
+                    album_pic = album_info[0]
+                    album_id = album_info[2]
+                    album_uri = album_info[1]
+                    song_uri = helpers.search_song_uri(spotify, album_id, song)
+
+                    ## Insert
+                    results[(song,artist,number,song_uri)] = album_pic
+                else:
+                    results[(song,artist,number,artist_uri)] = artist_pic
+
                 counter_songs += 1
                 if counter_songs == 10:
                     break 
-            print()
-            
-            print()
-            for (song, artist), number in list(convert_songs.items())[:10]:
-                print(f"You streamed {song} by {artist} this many times: {number}")
-            data_final = convert_songs
 
 
-        if session['path'] == "albums":
-            path = "Albums"
+        if session['path'] == "Albums":
+
+    
             sorted_albums = sorted(albums.items(), key=lambda x:x[1], reverse=True)
             convert_albums = dict(sorted_albums)
 
@@ -255,26 +272,29 @@ def results():
             print("Your Top Albums Were:")
             print()
             for (album, artist), number in convert_albums.items():
-                artist_info = helpers.search_for_pic(spotify, artist)
-                album_info = helpers.search_for_album(spotify, artist_info[1])
-                print('album results:')
-                print(album_info)
-                ##artist_info = "https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=1.00xw:0.753xh;0,0.153xh&resize=1200:*"
-                results[(album,artist,number)] = artist_info
+                artist_info = helpers.search_for_artist_info(spotify, artist)
+
+                artist_pic = artist_info[0]
+                artist_id = artist_info[1]
+                artist_uri = artist_info[2]
+
+                album_info = helpers.search_for_album(spotify, artist_id, album)
+
+                if album_info != None:
+
+                    album_pic = album_info[0]
+                    album_uri = album_info[1]
+                    album_id = album_info[2]
+                    results[(album,artist,number, album_uri)] = album_pic
+                else:
+                    results[(album,artist,number, artist_uri)] = artist_pic
+                    print()
                 counter_album += 1
-                if counter_album == 1:
-                    break 
-            print()
-       
-            print()
-            for artist, number in list(convert_albums.items())[:10]:
-                print(f"You streamed {artist[0]} by {artist[1]} this many times: {number}")
-            data_final = convert_albums
-
-
+                if counter_album == 10:
+                    break
 
         f.close()
-        return render_template('results.html',path=path,years=session['selected_years'], results=results)
+        return render_template('results.html',path=session['path'],years=session['selected_years'], results=results)
     
 
     
