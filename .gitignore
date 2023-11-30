@@ -5,3 +5,4 @@ __pycache__
 .DS_Store
 json_files
 .cache
+README.md
