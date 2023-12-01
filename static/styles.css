@@ -1,7 +1,7 @@
 /* General tags */
 p {
   color: #CFF56A;
-  font-family: Right_Reg;
+  font-family: Circluar_Norm;
   font-weight: bold;
   font-size: 30px;
   text-align: center;
@@ -30,6 +30,16 @@ a:hover {
   color: rgb(142, 81, 157);
 
 }
+
+li {
+  font-family: Circluar;
+  color:#CFF56A;
+  font-size: 40px;
+
+}
+
+
+
 
 
 /* Cursors */
@@ -87,7 +97,9 @@ a {
 
 /* Class tags */
 
-
+.spacing { 
+  letter-spacing: 1px;
+}
 
 .intro_para {
   padding: 30px;
@@ -95,7 +107,7 @@ a {
 }
 
 .right, .years_title {
-  font-family: Right_Norm;
+  font-family: Circluar_Black;
   text-align: center;
 }
 
@@ -127,10 +139,10 @@ a {
   background: #3e034f;
   color: #ffffff;
   border: 1px solid darkgreen;
-  border-radius: 70%;
+  border-radius: 50%;
   box-shadow: 1px 1px 10px whitesmoke;
   text-align: center;
-  font-size: 200%;
+  font-size: 100%;
   margin-top: 20px;
   }
 
@@ -145,9 +157,9 @@ a {
   background: #efebf0;
   padding: 2px;
   color: #3e034f;
-  border: 1px solid #0d0d0d;
+  border: 3px solid #3e034f;
   border-radius: 30px;
-  text-shadow: none;
+  text-shadow:#27c764;
   font-size: 50px;;
   margin: 5px;
   text-align: center;
@@ -176,25 +188,22 @@ a {
 
 
 
-
-
 .title {
   color:#CFF56A;
   font-family: Right_Norm;
   font-size: 70px;
   text-align: center;
   margin: 2px;
-  letter-spacing: -6px;
+
 }
 
 .para {
   color:whitesmoke;
-  font-family: Right_Light;
+  font-family: Circluar_Norm;
   font-size: 70px;
   text-align: center;
   margin: 10px;
-  letter-spacing: -6px;
-  text-decoration: underline;
+  letter-spacing: -1px;
   text-decoration-style:solid;
   text-decoration-thickness: 2px;
 
@@ -204,7 +213,7 @@ a {
 
 .para2, .para3 {
   color:white;
-  font-family: Mori;
+  font-family: Circluar_Light;
   font-size: 30px;
   margin-bottom: 0px;
 }
@@ -242,7 +251,7 @@ a {
 }
 
 .image_result:hover {
-  border-color: #27c764;
+  border-color: #CFF56A;
   border-style: solid;
   border-width: 4px;
   margin-bottom: 0px;
@@ -345,7 +354,13 @@ a {
 }
 
 .releae_title {
-  font-family: Right_Norm;
+  font-family: Circluar;
+}
+
+.result_info {
+  display:inline-block; 
+  font-size: 20px;
+  color:#52265e;
 }
 
 
@@ -392,3 +407,29 @@ a {
   font-family: Right_Reg;
   src: url(/static/fonts/Right/PPRightGroteskText-Regular.otf);
 }
+
+@font-face {
+  font-family: Circluar;
+  src: url(/static/fonts/Circluar/CircularStd-Black.otf);
+}
+
+@font-face {
+  font-family: Circluar_It;
+  src: url(/static/fonts/Circluar/CircularStd-BoldItalic.otf);
+}
+
+@font-face {
+  font-family: Circluar_Black;
+  src: url(/static/fonts/Circluar/CircularStd-Black.otf);
+}
+
+@font-face {
+  font-family: Circluar_Norm;
+  src: url(/static/fonts/Circluar/CircularStd-Medium.otf);
+}
+
+@font-face {
+  font-family: Circluar_Light;
+  src: url(/static/fonts/Circluar/CircularStd-Light.otf);
+}
+

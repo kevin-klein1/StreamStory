@@ -9,7 +9,7 @@ Page
 {% block main %}
 
     <div class="container3">
-    <h1 style="color: black; font-family: Right_Norm; text-decoration: underline #e4fba1; padding-bottom: 60px;;"> Your Top {{ path }} for {% for year in years %}
+    <h1 style="color:#52265e;; font-family: Circluar; text-decoration: underline #e4fba1; padding-bottom: 60px;;"> Your Top {{ path }} for {% for year in years %}
         {% if loop.last %}
             {{ year }}:
         {% else %}
@@ -19,27 +19,46 @@ Page
     <ul>
         {% for artist, pic in results.items() %}
         {% if path == "Artists" %}
-            <li>
+        
+            <li class="twosec_font_fade">
+                
                 <a class="uri" href="{{ artist[2] }}">
-                <img src="{{ pic }}" alt="artist_pic" class="image_result"> 
-                </a>  - {{ artist [0] }}
+                    <img src="{{ pic }}" alt="artist_pic" class="image_result"> 
+                </a>  {{ artist [0].upper() }}
                 <br>
-                You streamed {{ artist [0] }} {{ artist [1] }} times.
+                <div class="result_info">
+                You streamed <div style="font-family: Circluar_It; display: inline-block;">  {{ artist [0].upper() }}  </div> {{ artist[1] }} times.
+                </div>
                
             </li>
             <br>
+            <br>
+            <br>
         {% elif path == "Songs" %}
-            <li>
+            <li class="twosec_font_fade">
                 <a class="uri" href="{{ artist[3] }}">
-                <img src="{{ pic }}" alt="artist_pic" class="image_result"> </a> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [0]}} {{ artist [2]}} times.
+                    <img src="{{ pic }}" alt="artist_pic" class="image_result">
+                </a> <div style="font-family: Circluar_It; display: inline-block; color:#52265e; margin-left: 20px;"> {{ artist[0] }}</div> by {{ artist [1] }}
+                <br> 
+                <div class="result_info"> 
+                You streamed <div style="font-family: Circluar_It; display: inline-block;"> {{ artist [0]}} </div> {{ artist [2]}} times. 
+            </div>
             </li>
             <br>
-
+            <br>
+            <br>
         {% else %}
-        <li>
+        <li class="twosec_font_fade">
             <a class="uri" href="{{ artist[3] }}">
-            <img src="{{ pic }}" alt="artist_pic" class="image_result"> </a> - {{ artist[0] }} by {{ artist [1] }} <br> You streamed {{ artist [0]}} {{ artist [2]}} times.
+            <img src="{{ pic }}" alt="artist_pic" class="image_result"> 
+        </a> <div style="font-family: Circluar_It; display: inline-block; color:#52265e; margin-left: 20px;"> {{ artist[0] }}</div> by {{ artist [1] }} 
+        <br> 
+
+        <div class="result_info"> 
+        You streamed  <div style="font-family: Circluar_It; display: inline-block;">{{ artist [0]}} </div> {{ artist [2]}} times.
+        </div>
         </li>
+        <br>
         <br>
 
         {% endif %}
@@ -48,5 +67,5 @@ Page
         
     </ul>
 </div>
-
+<script defer src="/static/js/results.js"></script>
 {% endblock %}
