@@ -1,17 +1,13 @@
 from flask import Flask, render_template, session, request, redirect, url_for
-import requests
 import os
 from werkzeug.utils import secure_filename
 import json
 import datetime
 from dotenv import load_dotenv
-import base64
 import helpers
-import asyncio
-import time
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from PIL import Image
+
 
 
 
