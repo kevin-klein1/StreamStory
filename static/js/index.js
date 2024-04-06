@@ -33,7 +33,7 @@ document.getElementById('drop-area').addEventListener('dragleave', function(even
                     fileExtensionCheckFailed = true;
                     break;
                 }
-                if ((!isFileAlreadyUploaded(file)) && (droppedFiles.length < 10)) {
+                if ((!isFileAlreadyUploaded(file))) {
                     droppedFiles.push(file);
                 }
 

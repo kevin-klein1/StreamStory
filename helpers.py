@@ -31,7 +31,10 @@ def search_for_artist_info(spotify, artist):
     if len(items) > 0:
         artist = items[0]
         id = artist['id']
-        result = artist['images'][0]['url']
+        try:
+            result = artist['images'][0]['url']
+        except IndexError:  
+            result = None
         uri = artist['uri']
         return result, id, uri 
 

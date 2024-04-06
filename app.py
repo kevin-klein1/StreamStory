@@ -11,8 +11,7 @@ import asyncio
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-
-
+from PIL import Image
 
 
 
@@ -164,10 +163,8 @@ def results():
             song = stream['master_metadata_track_name']
             album = stream['master_metadata_album_album_name']
 
-            ## I stream my own music to practice and dont wanna see those results hah
-            if artist == None or artist == "Valleyheart" or artist == "Kevin Klein":
+            if artist == None:
                 continue
-
         
             ## Artist Dictionary
             if artist in favs:
@@ -240,8 +237,17 @@ def results():
                 if artist_info is None:
                     continue
 
+                if artist_pic == None:
+                    ## load a default image if artist picture is not found  
+                    ## artist_pic = path to smile.png in static folder, load from there
+                    artist_pic = "static/photos/smil.jpeg"
+                    
+                    
+                    
+
                 ## API call to get album information
                 album_info = helpers.search_for_album(spotify, artist_id, album)
+
 
                 ## Make sure this isn't Null + if it is: just display the artist picture. 
                 if album_info != None:
@@ -296,6 +302,8 @@ def results():
         f.close()
         return render_template('results.html',path=session['path'],years=session['selected_years'], results=results)
     
+
+
 
     
 
