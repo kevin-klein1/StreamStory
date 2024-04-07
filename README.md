@@ -13,7 +13,7 @@ StreamStory is an app built with Python/Flask that takes Extended Spotify Stream
 
 <h2 class="heading-element" dir="auto">Getting Started</h2>
 
-1) Request your streaming history data from Spotify <a href="https://www.spotify.com/us/account/privacy/#_=" target="_blank">here.</a>  Make sure you select "Extended Streaming History", not "Account Data".
+1) Request your streaming history data from Spotify <a href="https://www.spotify.com/us/account/privacy/#_=" target="_blank">here</a>. Make sure you select "Extended Streaming History", not "Account Data".
 
 2) Spotify will send you a zip file with your data within 5-7 days. You will recieve JSON files with all your data.
 
