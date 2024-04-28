@@ -4,7 +4,7 @@
 
 
 
-StreamStory is an app built with Python/Flask that takes Extended Spotify Streaming Data (json) and parses it into a Spotify Wrapped-like visualization for your top aritsts, songs, and albums. 
+StreamStory is an app built with Python/Flask that takes Extended Spotify Streaming Data (json) and parses it into a Spotify Wrapped-like visualization for your top artists, songs, and albums. 
 
 <h2 class="heading-element" dir="auto">Features</h2>
 
