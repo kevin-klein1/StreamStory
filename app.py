@@ -6,9 +6,7 @@ import datetime
 from dotenv import load_dotenv
 import helpers
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-
-
+from spotipy.oauth2 import SpotifyOAuth
 
 
 
@@ -29,7 +27,7 @@ app.secret_key = '1234'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ## Global lists for approved years & result path
-Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023']
+Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023', '2024']
 Filter = ['Artists', 'Songs', 'Albums']
 
 ## Function Defs
@@ -46,7 +44,16 @@ def upload_files(files):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+# def create_spotify_oauth():
+#     return SpotifyOAuth(
+#         client_id=, 
+#         client_secret=, 
+#         redirect_uri=, 
+#         scope=)
 
+## load .env files (client id and sercet)
+load_dotenv()
+ 
 ## Index route display
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -77,6 +84,22 @@ def index():
         upload_files(files2)
 
         return redirect("/years")
+    
+
+## Oauth Spotify redirection
+@app.route('/login')
+def login():
+     ## create Oauth ojbject for user auth
+        sp_oauth = SpotifyOAuth()
+        auth_url = sp_oauth.get_authorize_url()
+    
+        return redirect(auth_url)
+
+@app.route('/redirect')
+def redirectPage():
+    print("debug")
+    return "yo"
+    
         
     
 @app.route("/years", methods=["GET", "POST"])
@@ -190,7 +213,13 @@ def results():
         results = {}
 
         ## Spotipy creds authorization library
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        # spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+
+        ## play around with the OAuth Code Flow method
+        # try:
+        spotify = spotipy.Spotify(auth_manager=SpotifyOAuth())
+        # except Exception:
+        #     return render_template("error.html", message="Something went wrong :(", path=request.path)
 
         
         if session['path'] == "Artists":
