@@ -1,8 +1,0 @@
-5/1
-
-- Make sure cache info is deleted for each page (like I did for userinfo route)
-- implement pic and logout correctly while logged in
-
-- check if session token is expired to 
-
-- re do design 
