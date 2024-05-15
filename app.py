@@ -3,7 +3,6 @@ import os
 from werkzeug.utils import secure_filename
 import json
 import datetime
-from dotenv import load_dotenv
 import helpers
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth

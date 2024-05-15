@@ -1,9 +1,6 @@
 import json
-import datetime
-from requests import post, get
 from dotenv import load_dotenv
 import os
-import base64
 from flask import request, redirect
 
 
