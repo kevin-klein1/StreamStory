@@ -4,12 +4,22 @@ from requests import post, get
 from dotenv import load_dotenv
 import os
 import base64
+from flask import request, redirect
 
 
 
 
 
 ## Define Functions
+
+
+## reads json object, stringfy's it and writes/creates json file in workspace. Used to read json server side. 
+
+def write_json_file(object):
+    json_str = json.dumps(object)
+    with open('test.json', 'w') as file:
+        file.write(json_str)
+
 
 
 ## Merging many Spotify Json files as one
@@ -71,6 +81,15 @@ def search_song_uri(spotify, album_id, song):
         else:
             continue
     return None
+
+
+def spotify_callback():
+    # Check if there's an error parameter in the request
+    error = request.args.get('error')
+    if error == 'access_denied':
+        # User denied access, redirect to a different page
+        return redirect('/')
+
 
 ## load enviroment varialbes
 load_dotenv()

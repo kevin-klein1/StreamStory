@@ -4,6 +4,14 @@
 Homepage
 {% endblock %}
 
+{% block picture %}
+<a href="{{profile_link}}" target="_blank" ><img class="thumbnail" src = "{{ profile_pic }}"></a>
+{% endblock %}
+
+{% block logout %}
+<a href="/logout" class="logout">logout</a> 
+{% endblock %}
+
 
 
 {% block main %}
@@ -17,11 +25,11 @@ Homepage
     <h1 class="font_italic">
       StreamStory!
     </h1>
+    
 </div>
     <p class="intro_para">
         A look through the years at your Spotify streaming history.
     </p>
-    <p class="para2">Login <a class="green" href="/login">here</a> for better use.</p>
 
 </div>
 
