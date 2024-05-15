@@ -2,9 +2,12 @@
 .vscode
 .cache
 notes.txt
+test.json
 __pycache__
 .venv
 .DS_Store
 json_files
 README.md
 merged_file.json
+debug.py
+to-do.txt

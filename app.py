@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, make_response
 import os
 from werkzeug.utils import secure_filename
 import json
@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import helpers
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import debug
 
 
 
@@ -19,7 +20,12 @@ ALLOWED_EXT = {'json'}
 
 ## Set up flask app
 app = Flask(__name__)
-app.secret_key = '1234'
+
+
+## Cookie config 
+app.config['SESSION_COOKIE_NAME'] = 'User Cookie'
+app.secret_key = '123g834#$9gsfg54'
+TOKEN_INFO = "token_info"
 
 
 
@@ -29,6 +35,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ## Global lists for approved years & result path
 Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023', '2024']
 Filter = ['Artists', 'Songs', 'Albums']
+
+SCOPES = "playlist-read-collaborative user-top-read user-read-email user-read-private"
 
 ## Function Defs
 
@@ -44,20 +52,17 @@ def upload_files(files):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-# def create_spotify_oauth():
-#     return SpotifyOAuth(
-#         client_id=, 
-#         client_secret=, 
-#         redirect_uri=, 
-#         scope=)
-
-## load .env files (client id and sercet)
-load_dotenv()
- 
 ## Index route display
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
+        
+        ## checks if token session exists and redirects to user page if so
+        if 'token_info' in session and session['token_info'] is not None:
+            return redirect(url_for('userinfo'))
+        
+        session.clear()
+
         ## Create json folder upon each homepage visit if not exisiting already
         if not os.path.exists(UPLOAD_FOLDER):
             os.mkdir(UPLOAD_FOLDER)
@@ -89,23 +94,97 @@ def index():
 ## Oauth Spotify redirection
 @app.route('/login')
 def login():
-     ## create Oauth ojbject for user auth
+        
+        ## create Oauth ojbject for user auth
+
+        ## Init OAuth Object from Spotipy
         sp_oauth = SpotifyOAuth()
+
+        ## Get Spotify login url from object 
         auth_url = sp_oauth.get_authorize_url()
-    
+
+        ## get access code from request params
+        code = request.args.get('code')
+
+        ## pass code as arguement to get access function to obtain token info
+        token_info = sp_oauth.get_access_token(code)
+
+        ## assign token info to session variable
+        session[TOKEN_INFO] = token_info
+
         return redirect(auth_url)
 
-@app.route('/redirect')
-def redirectPage():
-    print("debug")
-    return "yo"
+## logout route
+@app.route('/logout')
+def logout():
+
+    session.clear()  
+    return redirect("/")
+
+
+@app.route('/userinfo', methods=["GET", "POST"])
+def userinfo():
+
+    if request.method == "GET":
+
+        ## check for cancel error 
+        error = request.args.get('error')
+        if error == 'access_denied':
+            return redirect('/')
     
+        ## checks if user is logged in
+        if 'token_info' not in session:
+            return redirect(url_for('index'))
+
+        ## creates Spotify object that handles API calls and retrieval 
+        sp = spotipy.Spotify(auth=session[TOKEN_INFO]['access_token'])
+
+        ## gets info from current user
+        user = sp.current_user()
+
+        ## assign profile pic and external link to session variable for multi scoped use
+        session['user_photo'] = user['images'][0]['url']
+        session['user_link'] = user['external_urls']['spotify']
+
+
+        ## response as a variable for cleaner output
+        response = make_response(render_template("index2.html", profile_pic= session['user_photo'], profile_link=session['user_link']))
+
+        # Add cache-control headers to prevent caching
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+
+        return response
+    
+    if request.method == "POST":
+
+            ## Get files from browse button
+            files = request.files.getlist('file')
+            ## Get files from drag and drop
+            files2 = request.files.getlist('file2')
+
+            ## Upload files into project
+            upload_files(files)
+            upload_files(files2)
+
+            return redirect("/years")
         
     
 @app.route("/years", methods=["GET", "POST"])
 def years():
     if request.method == "GET":
-        return render_template("years.html")
+
+        ## Creates login state. checks if user is logged in, if so renders login state
+        logged_in = 'token_info' in session and session['token_info'] is not None
+        if logged_in:
+            profile_pic = session['user_photo']
+            profile_link = session['user_link']
+        else:
+            profile_pic = None
+            profile_link = None
+        return render_template("years.html", logged_in=logged_in, profile_pic=profile_pic, profile_link=profile_link)
+
 
     if request.method == "POST":
         ## Get list of years user wants to filter
@@ -127,7 +206,16 @@ def years():
 @app.route("/filter", methods=["GET", "POST"])
 def filter():
     if request.method == "GET":
-        return render_template("filter.html")
+
+        
+        logged_in = 'token_info' in session and session['token_info'] is not None
+        if logged_in:
+            profile_pic = session['user_photo']
+            profile_link = session['user_link']
+        else:
+            profile_pic = None
+            profile_link = None
+        return render_template("filter.html",logged_in=logged_in, profile_pic=profile_pic, profile_link=profile_link)
 
     if request.method == "POST":
         ## Get results path selection into session variable
@@ -145,6 +233,15 @@ def filter():
 @app.route("/results")
 def results():
     if request.method == "GET":
+
+        logged_in = 'token_info' in session and session['token_info'] is not None
+        if logged_in:
+            profile_pic = session['user_photo']
+            profile_link = session['user_link']
+        else:
+            profile_pic = None
+            profile_link = None
+
         ## Set up folder path to json files and get file names
         folder_path = os.path.join(app.root_path, 'json_files')
         input_files = os.listdir(folder_path)
@@ -325,7 +422,7 @@ def results():
                     break
 
         f.close()
-        return render_template('results.html',path=session['path'],years=session['selected_years'], results=results)
+        return render_template('results.html',profile_pic=profile_pic, profile_link=profile_link, path=session['path'],years=session['selected_years'], results=results)
     
 
 

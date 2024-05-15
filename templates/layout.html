@@ -13,26 +13,14 @@
 
     <body class="body_fade purple">
 
-        <nav class="navbar mx-auto navbar-expand-lg navbar-light custom-navbar  ">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mx-auto">
-                <li class="nav-item active">
-                  <a class="nav-link spacing " style="color:#6f3380; font-size: 16px;" href="/">StreamStory: Home <span class="sr-only">(current)</span></a>
-              
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </div>
-                </li>
-              
-              </ul>
-            </div>
+        <nav class="navbar navbar-light custom-navbar">
+
+            {% block logout %}{% endblock %}
+
+            <a id="homepage_title" class="spacing centered-item" style=" font-size: 16px;" href="/">StreamStory: Home</a>
+                    
+            <span class="right-item"> {% block picture %}{% endblock %} </span>
+                      
           </nav>
 
 
