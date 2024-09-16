@@ -4,15 +4,7 @@
 Page
 {% endblock %}
 
-{% if logged_in == True %}
-    {% block picture %}
-        <a href="{{ profile_link }}" target="_blank"><img class="thumbnail" src="{{ profile_pic }}"></a>
-    {% endblock %}
 
-    {% block logout %}
-        <a href="/logout" class="logout">logout</a>
-    {% endblock %}
-{% endif %}
 
 
 

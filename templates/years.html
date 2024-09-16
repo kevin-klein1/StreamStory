@@ -4,15 +4,6 @@
 Page
 {% endblock %}
 
-{% if logged_in == True %}
-    {% block picture %}
-        <a href="{{ profile_link }}" target="_blank"><img class="thumbnail" src="{{ profile_pic }}"></a>
-    {% endblock %}
-
-    {% block logout %}
-        <a href="/logout" class="logout">logout</a>
-    {% endblock %}
-{% endif %}
 
 
 
@@ -43,6 +34,7 @@ Page
                                 <input class="twosec_font_fade pointer"  type="button" value="2021">
                                 <input class="twosec_font_fade pointer"  type="button" value="2022">
                                 <input class="twosec_font_fade pointer"  type="button" value="2023">
+                                <input class="twosec_font_fade pointer"  type="button" value="2024">
                                 <input id ="AllHist" class="pointer years_fade" type="button" value="All Your History">
 
                                 <input type="hidden" id="hiddenInput" name="selectedYears">

@@ -77,7 +77,7 @@ document.getElementById('drop-area').addEventListener('dragleave', function(even
         if (files.length > 0)  {
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                if ((!isFileAlreadyUploaded(file)) && (droppedFiles.length < 10)) {
+                if ((!isFileAlreadyUploaded(file))) {
                     droppedFiles.push(file);
                     
                 }

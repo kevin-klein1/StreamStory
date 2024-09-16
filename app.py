@@ -5,7 +5,7 @@ import json
 import datetime
 import helpers
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 
 
 
@@ -55,13 +55,7 @@ def upload_files(files):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        
-        ## checks if token session exists and redirects to user page if so
-        if 'token_info' in session and session['token_info'] is not None:
-            return redirect(url_for('userinfo'))
-        
-        session.clear()
-
+    
         ## Create json folder upon each homepage visit if not exisiting already
         if not os.path.exists(UPLOAD_FOLDER):
             os.mkdir(UPLOAD_FOLDER)
@@ -89,85 +83,6 @@ def index():
 
         return redirect("/years")
     
-
-## Oauth Spotify redirection
-@app.route('/login')
-def login():
-        
-        ## create Oauth ojbject for user auth
-
-        ## Init OAuth Object from Spotipy
-        sp_oauth = SpotifyOAuth()
-
-        ## Get Spotify login url from object 
-        auth_url = sp_oauth.get_authorize_url()
-
-        ## get access code from request params
-        code = request.args.get('code')
-
-        ## pass code as arguement to get access function to obtain token info
-        token_info = sp_oauth.get_access_token(code)
-
-        ## assign token info to session variable
-        session[TOKEN_INFO] = token_info
-
-        return redirect(auth_url)
-
-## logout route
-@app.route('/logout')
-def logout():
-
-    session.clear()  
-    return redirect("/")
-
-
-@app.route('/userinfo', methods=["GET", "POST"])
-def userinfo():
-
-    if request.method == "GET":
-
-        ## check for cancel error 
-        error = request.args.get('error')
-        if error == 'access_denied':
-            return redirect('/')
-    
-        ## checks if user is logged in
-        if 'token_info' not in session:
-            return redirect(url_for('index'))
-
-        ## creates Spotify object that handles API calls and retrieval 
-        sp = spotipy.Spotify(auth=session[TOKEN_INFO]['access_token'])
-
-        ## gets info from current user
-        user = sp.current_user()
-
-        ## assign profile pic and external link to session variable for multi scoped use
-        session['user_photo'] = user['images'][0]['url']
-        session['user_link'] = user['external_urls']['spotify']
-
-
-        ## response as a variable for cleaner output
-        response = make_response(render_template("index2.html", profile_pic= session['user_photo'], profile_link=session['user_link']))
-
-        # Add cache-control headers to prevent caching
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-
-        return response
-    
-    if request.method == "POST":
-
-            ## Get files from browse button
-            files = request.files.getlist('file')
-            ## Get files from drag and drop
-            files2 = request.files.getlist('file2')
-
-            ## Upload files into project
-            upload_files(files)
-            upload_files(files2)
-
-            return redirect("/years")
         
     
 @app.route("/years", methods=["GET", "POST"])
@@ -308,14 +223,12 @@ def results():
         ## Set up Top Ten Dictionary
         results = {}
 
-        ## Spotipy creds authorization library
-        # spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-
-        ## play around with the OAuth Code Flow method
-        # try:
-        spotify = spotipy.Spotify(auth_manager=SpotifyOAuth())
-        # except Exception:
-        #     return render_template("error.html", message="Something went wrong :(", path=request.path)
+    
+        ## tries to authorize user via Spotipy Client flow, if failed: displays error page
+        try: 
+            spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        except Exception:
+             return render_template("error.html", message="Something went wrong :(", path=request.path)
 
         
         if session['path'] == "Artists":
