@@ -55,6 +55,8 @@ def upload_files(files):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
+        ## temp clears session path
+        session['path'] = ""
     
         ## Create json folder upon each homepage visit if not exisiting already
         if not os.path.exists(UPLOAD_FOLDER):
@@ -88,23 +90,15 @@ def index():
 @app.route("/years", methods=["GET", "POST"])
 def years():
     if request.method == "GET":
-
-        ## Creates login state. checks if user is logged in, if so renders login state
-        logged_in = 'token_info' in session and session['token_info'] is not None
-        if logged_in:
-            profile_pic = session['user_photo']
-            profile_link = session['user_link']
-        else:
-            profile_pic = None
-            profile_link = None
-        return render_template("years.html", logged_in=logged_in, profile_pic=profile_pic, profile_link=profile_link)
+        return render_template("years.html")
 
 
     if request.method == "POST":
         ## Get list of years user wants to filter
         selected_years_unconverted = request.form.getlist('selectedYears')
 
-        ## Format years correctly for comparison & store in session variable
+        print(selected_years_unconverted)
+
         for year in selected_years_unconverted:
             session['selected_years'] = year.split(',')
     
@@ -120,24 +114,10 @@ def years():
 @app.route("/filter", methods=["GET", "POST"])
 def filter():
     if request.method == "GET":
-
-        
-        logged_in = 'token_info' in session and session['token_info'] is not None
-        if logged_in:
-            profile_pic = session['user_photo']
-            profile_link = session['user_link']
-        else:
-            profile_pic = None
-            profile_link = None
-        return render_template("filter.html",logged_in=logged_in, profile_pic=profile_pic, profile_link=profile_link)
+        return render_template("filter.html")
 
     if request.method == "POST":
         ## Get results path selection into session variable
-        selected_option = request.form['selection']
-        if selected_option not in Filter:
-            message= "Not a Valid Option!"
-            return render_template("error.html",message=message, path=request.path.strip("/").title())
-        session['path'] = selected_option
         return redirect("/results")
     else:
         return render_template ("error.html")
@@ -148,13 +128,15 @@ def filter():
 def results():
     if request.method == "GET":
 
-        logged_in = 'token_info' in session and session['token_info'] is not None
-        if logged_in:
-            profile_pic = session['user_photo']
-            profile_link = session['user_link']
-        else:
-            profile_pic = None
-            profile_link = None
+        ## Get's path (artist, song, albums) from previous form fron url paras. Handled by JS. 
+        selected_option = request.args.get('selection')
+        ## assign that value to the session path
+        session['path'] = selected_option
+
+        ## Handle error if path doesn't exist
+        if not selected_option or selected_option not in Filter:
+            message = "Not a Valid Option!"
+            return render_template("error.html", message=message, path=request.path.strip("/").title())
 
         ## Set up folder path to json files and get file names
         folder_path = os.path.join(app.root_path, 'json_files')
@@ -217,7 +199,7 @@ def results():
 
         ## Make sure theres data in the dictionaries, if not - return error page
         if len(favs) == 0:
-            return render_template("error.html", message="No Data for these years!", path=request.path)
+            return render_template("error.html", message="Please upload your data!", path='Homepage')
 
 
         ## Set up Top Ten Dictionary
@@ -263,22 +245,21 @@ def results():
             for (song,artist,album), number in convert_songs.items():
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
+                ## Some artist_info comes back empty, if that's the case abort to avoid error
+                if artist_info is None:
+                    continue
+
+                ## Some artist_info comes back empty, if that's the case abort to avoid error
                 artist_pic = artist_info[0]
                 artist_id = artist_info[1]
                 artist_uri = artist_info[2]
 
                 ## Some artist_info comes back empty, if that's the case abort to avoid error
-                if artist_info is None:
-                    continue
-
                 if artist_pic == None:
                     ## load a default image if artist picture is not found  
                     ## artist_pic = path to smile.png in static folder, load from there
                     artist_pic = "static/photos/smil.jpeg"
                     
-                    
-                    
-
                 ## API call to get album information
                 album_info = helpers.search_for_album(spotify, artist_id, album)
 
@@ -309,8 +290,7 @@ def results():
             convert_albums = dict(sorted_albums)
 
             counter_album = 0
-            print("Your Top Albums Were:")
-            print()
+            
             for (album, artist), number in convert_albums.items():
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
@@ -334,10 +314,19 @@ def results():
                     break
 
         f.close()
-        return render_template('results.html',profile_pic=profile_pic, profile_link=profile_link, path=session['path'],years=session['selected_years'], results=results)
-    
+        return render_template('results.html',path=session['path'],years=session['selected_years'], results=results, all_time=Approved_years)
 
 
+## Handles 404 and 500 Errors
+@app.errorhandler(404)
+def page_not_found(e):
+    # Custom 404 error handler
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    # Custom 500 error handler
+    return render_template('500.html'), 500
 
     
 

@@ -1,6 +1,6 @@
 /* General tags */
 p {
-  color: #CFF56A;
+  color: #cff56a;
   font-family: Circluar_Norm;
   font-weight: bold;
   font-size: 30px;
@@ -8,12 +8,10 @@ p {
   margin: 0px;
 }
 
-
-
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  
 }
 
 ul {
@@ -28,28 +26,16 @@ form {
 a:hover {
   text-decoration: none;
   color: rgb(142, 81, 157);
-
 }
 
 li {
   font-family: Circluar;
-  color:#CFF56A;
+  color: #cff56a;
   font-size: 40px;
-
 }
 
-
-
-
-
-/* Cursors */
-
-.pointer {
-  cursor: pointer;
-}
 
 h1 {
-
   color: white;
 }
 
@@ -57,15 +43,18 @@ a {
   text-decoration: none !important;
 }
 
+/* Cursors */
 
+.pointer {
+  cursor: pointer;
+}
 
 /* ID tags */
-
 
 #fade-in-element {
   opacity: 0; /* Set initial opacity to 0 */
   transition: opacity 3s; /* Add a transition for smooth fading */
-  }
+}
 
 #instructions_fade {
   opacity: 0;
@@ -73,23 +62,31 @@ a {
 }
 
 #browseButton {
-  color: #CFF56A; 
-  font-weight: bold; 
+  color: #cff56a;
+  font-weight: bold;
   font-family: Right_Light;
 }
 
 #browseButton:hover {
   text-decoration: underline;
-  color: #27c764;
+  color: #52265e;
 }
 
 #submitBtn {
-  display: none; 
-  border-radius: 12px; 
+  display: none;
+  border-radius: 12px;
   text-align: center;
-  margin:20px;
+  margin: 20px;
   font-family: Right_Light;
   float: none;
+}
+
+#loading-screen {
+  justify-content: center;
+  border-radius: 40%;
+}
+#loading-screen p {
+  color: #52265e;
 }
 
 #uploadForm {
@@ -98,15 +95,23 @@ a {
 
 /* Class tags */
 
-
 .thumbnail {
   border-radius: 50%;
   object-fit: cover;
+}
+
+.centered_message {
+  justify-content: center;
 
 }
 
+.centered_message p {
+  color: #52265e;
+  font-size: 40px;
+}
+
 .thumbnail:hover {
-  border-color: #CFF56A;
+  border-color: #cff56a;
   border-style: solid;
   border-width: 1px;
   padding: 0;
@@ -121,8 +126,8 @@ a {
 .centered-item {
   flex-grow: 1;
   text-align: center; /* Center the content */
-  margin-right: auto;  /* Ensures it stays centered */
-  margin-left: auto;   /* Ensures it stays centered */
+  margin-right: auto; /* Ensures it stays centered */
+  margin-left: auto; /* Ensures it stays centered */
 }
 
 .right-item {
@@ -130,7 +135,7 @@ a {
   flex-grow: 0; /* Do not grow, occupy only required space */
 }
 
-.spacing { 
+.spacing {
   letter-spacing: 1px;
 }
 
@@ -139,7 +144,8 @@ a {
   margin-top: 10px;
 }
 
-.right, .years_title {
+.right,
+.years_title {
   font-family: Circluar_Black;
   text-align: center;
 }
@@ -148,37 +154,31 @@ a {
   font-size: 40px;
 }
 
-.logout {
-  color:#3e034f;
-  font-family: Circluar;
-}
-
-.logout:hover {
-    color: #273206;
-}
-
-
 #homepage_title {
-  color:#3e034f;
+  color: #52265e;
   font-family: Circluar;
+  padding: 10px;
 }
 
 .green {
-  color: #CFF56A;
+  color: #cff56a;
 }
 
+.green:hover {
+  color: #fefaff;
+}
 
 .button {
-  background: #3e034f;
+  background: #52265e;
   color: #ffffff;
   border: 1px solid #eee;
   border-radius: 20px;
   box-shadow: 1px 1px 1px #eee;
   text-shadow: none;
-  }
+}
 
 .years_submit_button {
-  background: #3e034f;
+  background: #52265e;
   color: #ffffff;
   border: 1px solid darkgreen;
   border-radius: 50%;
@@ -186,75 +186,92 @@ a {
   text-align: center;
   font-size: 100%;
   margin-top: 20px;
-  }
+}
 
-  .years_submit_button:active {
-    border: 1px solid white;
-    background: rgb(142, 81, 157);
-
-
-  }
+.years_submit_button:active {
+  border: 1px solid white;
+  background: rgb(142, 81, 157);
+}
 
 .year_button > input {
   background: #efebf0;
   padding: 2px;
-  color: #3e034f;
+  color: #52265e;
   border: 3px solid #3e034f;
   border-radius: 30px;
-  text-shadow:#27c764;
-  font-size: 50px;;
+  text-shadow: #27c764;
+  font-size: 50px;
   margin: 5px;
   text-align: center;
-  }   
+}
 
-  .font_fade {
-      opacity: 0;
-      transition: opacity 1s; /* Set the transition duration to 1 second */
-  }
+.font_fade {
+  opacity: 0;
+  transition: opacity 1s; /* Set the transition duration to 1 second */
+}
 
-  .twosec_font_fade {
-      opacity: 0;
-      transition: opacity 1.5s; /* Set the transition duration to 1 second */
-  }
+.go_back_container {
+  text-align: center; /* Center the button in the container */
+  width: 100%; /* Ensure the container spans full width */
+}
 
+.go_back_button {
+  display: inline-block; /* Button takes up only its content's width */
+  padding: 10px 20px; /* Add padding around the button */
+  font-family: Circluar_Norm;
+  color: #52265e;
+  cursor: pointer; /* Center the text */
+}
 
-  .body_fade {
-      opacity: 0;
-      transition: opacity .5s;
-  }
+.go_back_button p {
+  display: inline-block;
+}
 
-  .years_fade {
-    opacity: 0;
-    transition: opacity 2s;
-  }
+.go_back_button a {
+  color: #52265e; /* Change color on hover */
+}
 
+.go_back_button a:hover {
+  color: #cff56a; /* Change color on hover */
+}
 
+.twosec_font_fade {
+  opacity: 0;
+  transition: opacity 1.5s; /* Set the transition duration to 1 second */
+}
+
+.body_fade {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.years_fade {
+  opacity: 0;
+  transition: opacity 2s;
+}
 
 .title {
-  color:#CFF56A;
+  color: #cff56a;
   font-family: Right_Norm;
   font-size: 70px;
   text-align: center;
   margin: 2px;
-
 }
 
 .para {
-  color:whitesmoke;
+  color: whitesmoke;
   font-family: Circluar_Norm;
   font-size: 70px;
   text-align: center;
   margin: 10px;
   letter-spacing: -1px;
-  text-decoration-style:solid;
+  text-decoration-style: solid;
   text-decoration-thickness: 2px;
-
-
-
 }
 
-.para2, .para3 {
-  color:white;
+.para2,
+.para3 {
+  color: white;
   font-family: Circluar_Light;
   font-size: 30px;
   margin-bottom: 0px;
@@ -264,7 +281,8 @@ a {
   padding-top: 20px;
 }
 
-.container, .container2 {
+.container,
+.container2 {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -273,7 +291,6 @@ a {
   min-height: 90%;
 }
 .container_head {
-
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -281,13 +298,11 @@ a {
   margin-top: 10px;
   min-height: 90%;
   width: 100%;
-
 }
-
 
 .container2 {
   min-height: 80%;
-  background-color: rgb(39, 2, 63);
+  background-color: #52265e;
 }
 
 .container3 {
@@ -297,28 +312,25 @@ a {
 }
 
 .image_result {
-  width: 300px; 
-  height: 300px; 
-  padding-bottom:0px; 
-  object-fit: cover; 
-
+  width: 300px;
+  height: 300px;
+  padding-bottom: 0px;
+  object-fit: cover;
 }
 
 .image_result:hover {
-  border-color: #CFF56A;
+  border-color: #cff56a;
   border-style: solid;
   border-width: 4px;
   margin-bottom: 0px;
-
 }
 
 .padding {
-
   padding: 20px;
 }
 
 .drop_area {
-  border: 2px dashed #CFF56A;
+  border: 2px dashed #cff56a;
   text-align: center;
   padding: 20px;
   background-color: rgb(228, 175, 228);
@@ -328,16 +340,16 @@ a {
 }
 
 .file_list {
-  font-family:Right_Norm;
+  font-family: Right_Norm;
   text-align: left;
   display: none;
 }
 
 .font_italic {
-  color:#CFF56A;
+  color: #cff56a;
   font-family: Right_Italic;
   font-size: 100px;
-  margin:2px;
+  margin: 2px;
   text-align: center;
 }
 
@@ -346,7 +358,7 @@ a {
 }
 
 .text_border {
-  border:#CFF56A;
+  border: #cff56a;
   border-style: solid;
   border-width: 5px;
   padding: 40px;
@@ -354,56 +366,52 @@ a {
 }
 
 .custom-navbar {
-  background-color:#e4fba1; /* Set your desired background color */
+  background-color: #e4fba1; /* Set your desired background color */
   /* Add any other custom styles as needed */
 }
 
 .custom-navfont {
-  font-family: Right_Light; 
-  color:antiquewhite;
+  font-family: Right_Light;
+  color: antiquewhite;
 }
-
 
 .photo_back {
-
-      background-image: url('/static/photos/sgcdesignco-NIo8Fd-RngE-unsplash.jpg'); /* Replace with the path to your image */
-      background-size: cover; /* This will make sure the image covers the entire container */
-      background-position: center center; /* This will center the image within the container */
-      background-repeat: no-repeat; /* This will prevent the image from repeating */
-      /* Add any other custom styles for the container */
+  background-image: url("/static/photos/sgcdesignco-NIo8Fd-RngE-unsplash.jpg"); /* Replace with the path to your image */
+  background-size: cover; /* This will make sure the image covers the entire container */
+  background-position: center center; /* This will center the image within the container */
+  background-repeat: no-repeat; /* This will prevent the image from repeating */
+  /* Add any other custom styles for the container */
 }
-
 
 .filter_button {
-  border: none; 
+  border: none;
   vertical-align: top;
   background-color: transparent;
 }
 
-.filter_button:focus, a:focus {
-  border: none; 
-  outline:none;
+.filter_button:focus,
+a:focus {
+  border: none;
+  outline: none;
   vertical-align: top;
   background-color: transparent;
 }
-
-
 
 .filter_button_img {
-  width:300px; 
+  width: 300px;
   border: none;
   padding: 20px;
 }
 
 .filter_button_img:active {
-  width:300px; 
+  width: 300px;
   border: none;
   padding: 20px;
-  opacity: .6;
+  opacity: 0.6;
 }
 
 .filter_button_img:hover {
-  width:310px; 
+  width: 310px;
   padding: 0px;
 }
 
@@ -412,25 +420,21 @@ a {
 }
 
 .result_info {
-  display:inline-block; 
+  display: inline-block;
   font-size: 20px;
-  color:#52265e;
+  color: #52265e;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+.spinner {
+  border: 10px solid #52265e;
+  border-top: 10px solid #cff56a;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+}
 
 /* Custom fonts */
-
 
 @font-face {
   font-family: Mori;
@@ -487,3 +491,14 @@ a {
   src: url(/static/fonts/Circluar/CircularStd-Light.otf);
 }
 
+
+/* Keyframes */ 
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

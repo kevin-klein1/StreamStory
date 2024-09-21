@@ -1,69 +1,65 @@
-{% extends "layout.html" %}
-
-{% block title %}
-Homepage
-{% endblock %}
-
-
-
-{% block main %}
+{% extends "layout.html" %} {% block title %} Homepage {% endblock %} {% block
+main %}
 
 <!--Create first container Introduction-->
 <div class="font_fade container">
   <div class="text_border">
-    <h1  class="title">
-    	Welcome to 
-    </h1>
-    <h1 class="font_italic">
-      StreamStory!
-    </h1>
+    <h1 class="title">Welcome to</h1>
+    <h1 class="font_italic">StreamStory!</h1>
+  </div>
+  <p class="intro_para">
+    A look through the years at your Spotify streaming history.
+  </p>
 </div>
-    <p class="intro_para">
-        A look through the years at your Spotify streaming history.
-    </p>
-
-</div>
-
-
-
 
 <!--Second Section with explanation and submission form-->
 <div class="font_fade container2">
+  <div class="para">Here's how it works:</div>
+  <!--Here explain process: Why doesn't the para2 cascade below?-->
+  <p class="para2">
+    1) Request your "Extended History" from Spotify
+    <a
+      href="https://www.spotify.com/us/account/privacy"
+      target="_blank"
+      class="green"
+      >here</a
+    >.
+  </p>
 
-	<div class="para">
-    Here's how it works:
-	</div>
-<!--Here explain process: Why doesn't the para2 cascade below?-->
-	<p class="para2">
-    1) Request your extended history from Spotify <a href="https://www.spotify.com/us/account/privacy" class="green">here</a>. 
-    <p class="para2">Spotify will email you a zip file with your data within 5-7 days. </p>
-    <p class="para2">You will recieve JSON files with all your data.</p>
-	</p>
+  <p class="para2">
+    Spotify will email you a zip file with your data within 5-7 days.
+  </p>
 
-	<p class="para3"> 2) Drag and drop your JSON files below:</p>
+  <p class="para3">2) Drag and drop your files here:</p>
 
-
-<!--Form area for submission of data-->
-	<form id="uploadForm" enctype="multipart/form-data" method="post">
+  <!--Form area for submission of data-->
+  <form id="uploadForm" enctype="multipart/form-data" method="post">
     <div id="drop-area" class="drop_area">
-        
-        <input type="file" id="fileInput" name="file" style="display:none;" accept=".json" multiple>
-        <input type="file" id="fileInput2" name="file2" style="display:none;" accept=".json" multiple>
-        <div id="file-list" class="file_list">
-  
-        </div>
-        Drag & Drop Files Here or <a class="pointer" id="browseButton">Browse</a>
+      <input
+        type="file"
+        id="fileInput"
+        name="file"
+        style="display: none"
+        accept=".json"
+        multiple
+      />
+      <input
+        type="file"
+        id="fileInput2"
+        name="file2"
+        style="display: none"
+        accept=".json"
+        multiple
+      />
+      <div id="file-list" class="file_list"></div>
+      Drag & Drop Files Here or <a class="pointer" id="browseButton">Browse</a>
     </div>
-    <button class="button pointer" type="submit" id="submitBtn">Submit Files</button>
-    
-</form>
-
+    <button class="button pointer" type="submit" id="submitBtn">
+      Submit Files
+    </button>
+  </form>
 </div>
 
-
-
 <script src="/static/js/index.js"></script>
-
-
 
 {% endblock %}

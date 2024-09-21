@@ -1,18 +1,10 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} Page {% endblock %} {% block main
+%}
 
-{% block title %}
-Page
-{% endblock %}
-
-
-{% block main %}
 <div class="container">
-    <p class="error-message">
-        {{ message }}
-    </p>
-        <br>
-        <a class="green" style="font-size: 30px;"href="/years">Back to {{ path }}</a>
-    </p>
+  <p class="error-message">{{ message }}</p>
+  <br />
+  <a class="green" style="font-size: 30px" href="/">Back to {{ path }}</a>
 </div>
 
 {% endblock %}

@@ -2,23 +2,22 @@
 %}
 <div class="container"></div>
 <ul>
-    {% for playlist in playlists %}
+  {% for playlist in playlists %}
 
-        <li class="twosec_font_fade">
-            
-            <a class="uri" href="{{ playlist['name'] }}">
-                <img src="{{ playlist['cover'] }}" alt="artist_pic" class="image_result"> 
-            </a>  {{ playlist['name'].upper() }}
-            <br>
-        </li>
+  <li class="twosec_font_fade">
+    <a class="uri" href="{{ playlist['name'] }}">
+      <img
+        src="{{ playlist['cover'] }}"
+        alt="artist_pic"
+        class="image_result"
+      />
+    </a>
+    {{ playlist['name'].upper() }}
+    <br />
+  </li>
 
-    {% endfor %}
-
-    
+  {% endfor %}
 </ul>
-</div>
 <script defer src="/static/js/results.js"></script>
-
-
 
 {% endblock %}
