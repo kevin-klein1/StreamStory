@@ -350,6 +350,6 @@ def internal_server_error(e):
     
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5005)
+    app.run(debug=False, port=5005)
 
     
