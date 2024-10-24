@@ -12,17 +12,14 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 
 
-## Create the routing connection for uploading json files
-UPLOAD_FOLDER = os.path.join(os.getcwd(), 'json_files')
-ALLOWED_EXT = {'json'}
-
-
 
 ## Set up flask app
 app = Flask(__name__)
 ## cache support for results
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})  
 
+UPLOAD_FOLDER = os.path.join(app.root_path, 'json_files')
+ALLOWED_EXT = {'json'}
 
 
 
