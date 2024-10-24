@@ -2,9 +2,11 @@
 %}
 
 <div class="container">
-  <p class="error-message">{{ message }}</p>
+  <p class="error_message">{{ message }}</p>
   <br />
-  <a class="green" style="font-size: 30px" href="/">Back to {{ path }}</a>
+  <div class="go_back_container">
+    <a class="go_back_button" href="/filter">Go Back</a>
+  </div>
 </div>
 
 {% endblock %}

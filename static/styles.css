@@ -1,44 +1,63 @@
 /* General tags */
-p {
-  color: #cff56a;
-  font-family: Circluar_Norm;
-  font-weight: bold;
-  font-size: 30px;
-  text-align: center;
+
+body,
+html {
+
   margin: 0px;
+
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
+p {
+  margin: auto;
+  color: var(--sec-color);
+  font-family: Right_Reg;
+  letter-spacing: 1px;
+}
+
+span {
+  font-family: Circluar_Black;
+  color: var(--main-color);
+  font-size: 110%;
+}
+
+legend {
+  text-align: center;
+  font-family: Right_Light;
+  color: white;
+}
+input {
+  color: #cff56a;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+}
+
+h1,
+h2 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+button {
+  border: black;
+}
+
+* {
+  box-sizing: border-box; /* Include padding and border in width/height */
 }
 
 ul {
   list-style-type: none;
   padding: 0;
-}
-
-form {
-  display: contents;
+  margin: 0px;
 }
 
 a:hover {
   text-decoration: none;
-  color: rgb(142, 81, 157);
-}
-
-li {
-  font-family: Circluar;
-  color: #cff56a;
-  font-size: 40px;
-}
-
-
-h1 {
   color: white;
 }
-
 a {
   text-decoration: none !important;
 }
@@ -56,41 +75,116 @@ a {
   transition: opacity 3s; /* Add a transition for smooth fading */
 }
 
+#intro_para {
+  font-size: 1.4vw;
+  padding-top: 0.5em;
+  width: 80%;
+  text-align: center;
+}
+
+#smile_a {
+  position: absolute;
+}
+
+/* #wavy {
+  background-image: url(/static/photos/wave4.png);
+  background-size: contain;
+  background-blend-mode:color-dodge;
+
+  background-repeat: no-repeat;
+} */
+
+#smile_guy {
+  position: absolute;
+  padding: 2px;
+  width: 60px;
+  height: 60px;
+  left: 20px;
+}
+
+#navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 100px;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+#text_border {
+  border: var(--sec-color);
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 60px;
+}
+
 #instructions_fade {
   opacity: 0;
   transition: opacity 1.5s;
 }
 
+#results_header {
+  margin-left: 0;
+}
+
 #browseButton {
-  color: #cff56a;
+  color: var(--sec-color);
   font-weight: bold;
   font-family: Right_Light;
 }
 
 #browseButton:hover {
   text-decoration: underline;
-  color: #52265e;
+  color: white;
 }
 
-#submitBtn {
+#submitBtn,
+#submitBtn2 {
   display: none;
-  border-radius: 12px;
+  margin: auto;
   text-align: center;
-  margin: 20px;
-  font-family: Right_Light;
-  float: none;
+  align-items: center;
+  font-family: Circluar_Norm;
+  font-size: 1.5vw;
+  color: black;
+  background-color: var(--sec-color);
+  margin-top: 30.12px;
+  margin-bottom: 8px;
+  padding: 8px;
+}
+
+#submitBtn2 {
+  display: flex;
+  font-size: 2vw;
+  margin-top: 0;
+  margin-bottom: 330px;
+}
+
+#submitBtn:hover,
+#submitBtn2:hover {
+  background-color: white;
+  color: black;
+}
+
+.yearsButton {
+  display: flex;
 }
 
 #loading-screen {
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  border-radius: 40%;
-}
-#loading-screen p {
-  color: #52265e;
 }
 
-#uploadForm {
-  align-content: center;
+#loading-screen p {
+  color: #ffffff;
+  margin: auto;
+  font-size: 2rem;
+  font-family: Right_Reg;
+  letter-spacing: 1px;
+  text-align: center;
+  justify-content: center;
 }
 
 /* Class tags */
@@ -100,13 +194,19 @@ a {
   object-fit: cover;
 }
 
+
+.swirl{
+  background-image: url(/static/photos/wave.png);
+  background-size: contain;
+  background-repeat: repeat-y;
+ 
+}
+
 .centered_message {
   justify-content: center;
-
 }
 
 .centered_message p {
-  color: #52265e;
   font-size: 40px;
 }
 
@@ -118,36 +218,15 @@ a {
   margin-bottom: 0px;
 }
 
-.navbar_own {
-  display: flex;
-  justify-content: space-between;
-}
-
-.centered-item {
-  flex-grow: 1;
-  text-align: center; /* Center the content */
-  margin-right: auto; /* Ensures it stays centered */
-  margin-left: auto; /* Ensures it stays centered */
-}
-
-.right-item {
-  /* No need for positioning */
-  flex-grow: 0; /* Do not grow, occupy only required space */
-}
-
-.spacing {
-  letter-spacing: 1px;
-}
-
-.intro_para {
-  padding: 30px;
-  margin-top: 10px;
-}
-
-.right,
 .years_title {
   font-family: Circluar_Black;
   text-align: center;
+}
+
+.year_button {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 .years_title {
@@ -155,84 +234,84 @@ a {
 }
 
 #homepage_title {
-  color: #52265e;
-  font-family: Circluar;
-  padding: 10px;
+  color: white;
+  font-family: Right_Reg;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  padding: 2rem;
+  text-align: center;
+  flex-grow: 1;
+  margin: 0;
+}
+
+#homepage_title:hover {
+  color: var(--sec-color);
 }
 
 .green {
-  color: #cff56a;
+  color: var(--sec-color);
+  font-family: Circluar_Black;
 }
 
 .green:hover {
-  color: #fefaff;
+  color: var(--green-color);
 }
 
 .button {
-  background: #52265e;
-  color: #ffffff;
-  border: 1px solid #eee;
-  border-radius: 20px;
-  box-shadow: 1px 1px 1px #eee;
-  text-shadow: none;
-}
-
-.years_submit_button {
-  background: #52265e;
-  color: #ffffff;
-  border: 1px solid darkgreen;
+  border: var(--sec-color);
+  border-style: solid;
+  border-width: 5px;
   border-radius: 50%;
-  box-shadow: 1px 1px 10px whitesmoke;
-  text-align: center;
-  font-size: 100%;
-  margin-top: 20px;
+  padding: 2em;
+  margin: auto;
 }
 
-.years_submit_button:active {
-  border: 1px solid white;
-  background: rgb(142, 81, 157);
+.S {
+  color: white;
+
 }
 
-.year_button > input {
-  background: #efebf0;
-  padding: 2px;
-  color: #52265e;
-  border: 3px solid #3e034f;
-  border-radius: 30px;
-  text-shadow: #27c764;
-  font-size: 50px;
-  margin: 5px;
-  text-align: center;
-}
-
-.font_fade {
-  opacity: 0;
-  transition: opacity 1s; /* Set the transition duration to 1 second */
-}
 
 .go_back_container {
+  display: flex;
+  justify-content: space-around;
   text-align: center; /* Center the button in the container */
   width: 100%; /* Ensure the container spans full width */
 }
 
 .go_back_button {
-  display: inline-block; /* Button takes up only its content's width */
+  display: flex; /* Button takes up only its content's width */
   padding: 10px 20px; /* Add padding around the button */
-  font-family: Circluar_Norm;
-  color: #52265e;
+  font-family: Circluar_Light;
+  letter-spacing: -1px;
+  color: var(--sec-color);
   cursor: pointer; /* Center the text */
 }
 
-.go_back_button p {
-  display: inline-block;
+.error_message {
+  color: #ffffff;
+  margin: auto;
+  font-size: 2rem;
+  font-family: Right_Reg;
+  letter-spacing: 1px;
+  text-align: center;
+  justify-content: center;
 }
 
+
+
 .go_back_button a {
-  color: #52265e; /* Change color on hover */
+  color: var(--sec-color) ;
+  font-size: 2.5rem;
 }
 
 .go_back_button a:hover {
-  color: #cff56a; /* Change color on hover */
+  color: white; /* Change color on hover */
+}
+
+.body_fade {
+  opacity: 0;
+  transition: opacity 2s;
 }
 
 .twosec_font_fade {
@@ -240,28 +319,15 @@ a {
   transition: opacity 1.5s; /* Set the transition duration to 1 second */
 }
 
-.body_fade {
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-
 .years_fade {
   opacity: 0;
   transition: opacity 2s;
 }
 
-.title {
-  color: #cff56a;
-  font-family: Right_Norm;
-  font-size: 70px;
-  text-align: center;
-  margin: 2px;
-}
-
 .para {
   color: whitesmoke;
   font-family: Circluar_Norm;
-  font-size: 70px;
+  font-size: 80px;
   text-align: center;
   margin: 10px;
   letter-spacing: -1px;
@@ -269,27 +335,13 @@ a {
   text-decoration-thickness: 2px;
 }
 
-.para2,
-.para3 {
-  color: white;
-  font-family: Circluar_Light;
-  font-size: 30px;
-  margin-bottom: 0px;
-}
-
-.para3 {
-  padding-top: 20px;
-}
-
-.container,
-.container2 {
+.flexdiv2 {
   display: flex;
-  flex-direction: column;
+  text-align: center;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  min-height: 90%;
 }
+
 .container_head {
   display: flex;
   flex-direction: row;
@@ -300,22 +352,47 @@ a {
   width: 100%;
 }
 
+.container,
+.container_choices {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 70%; /* Use the full width */
+  background-color: var(--main-color);
+  height: 100%;
+}
+
 .container2 {
-  min-height: 80%;
-  background-color: #52265e;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  background-color: var(--main-color);
+  width: 90%;
+  margin: auto;
+  margin-top: 60px;
+  margin-bottom: 40px;
 }
 
 .container3 {
-  justify-content: left;
   margin-left: 50px;
+  margin-right: 50px;
+  max-width: 2000px;
   margin-top: 10px;
 }
 
+.container_choices {
+  margin-top: 5%;
+}
+
 .image_result {
-  width: 300px;
-  height: 300px;
+  width: 20vw;
+  height: 20vw;
   padding-bottom: 0px;
   object-fit: cover;
+  margin-right: 1rem;
 }
 
 .image_result:hover {
@@ -329,45 +406,142 @@ a {
   padding: 20px;
 }
 
-.drop_area {
-  border: 2px dashed #cff56a;
-  text-align: center;
-  padding: 20px;
-  background-color: rgb(228, 175, 228);
-  color: #070707;
-  font-family: Mori;
-  margin-top: 40px;
+.explanation {
+  font-size: 1.6vw;
+  color: white;
+  font-family: Circluar_Light;
+  letter-spacing: normal;
+  padding-bottom: 4px;
 }
 
-.file_list {
-  font-family: Right_Norm;
-  text-align: left;
+.drop_area {
+  border: 2px dashed var(--sec-color);
+  font-size: 2vw;
+  background-color: var(--main-color);
+  color: white;
+  font-family: Circluar_Norm;
+  padding: 5vw;
+  /* Flexbox for centering */
+}
+
+.file_list,
+.container-list {
+  border-color: var(--sec-color);
+  border-style: solid;
+  border-width: 2.5px;
+  border-radius: 60px;
+  font-family: Right_Light;
+  font-size: 1vw;
+  flex-direction: column;
+  align-items: center;
+  color: var(--sec-color);
   display: none;
+  padding: 2em;
+  overflow: scroll;
+  scrollbar-color: var(--sec-color);
+  width: 40%;
+  margin: auto;
+}
+
+.result_section {
+  display: flex;
+}
+
+.container-list {
+  border: none;
+  border-radius: 0px;
+  display: flex;
+  width: 100%;
+}
+
+.year_button > input {
+  font-family: Circluar_Norm;
+  padding: 12px;
+  margin: 4px;
+  background-color: white;
+  color: var(--main-color);
+  font-size: 3vw;
+  align-items: center;
+  border: none;
+}
+
+.year_button > input:hover {
+  background-color: var(--sec-color);
+  color: var(--main-color); /* Active text color */
+}
+
+.year_button > input.active {
+  background-color: whitesmoke; /* Active background color */
+  color: black; /* Active text color */
+  box-shadow: inset 1px 1px 3px var(--main-color);
+
 }
 
 .font_italic {
-  color: #cff56a;
+  color: var(--sec-color);
   font-family: Right_Italic;
-  font-size: 100px;
-  margin: 2px;
+  padding: 2rem;
+  font-size: 6vw;
+}
+
+.heading,
+.heading2,
+.heading3,
+.heading4,
+.heading_results {
+  color: white;
+  font-family: Right_Italic;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 0.3vw;
+  text-decoration-color: var(--sec-color);
+  text-decoration-thickness: 3px;
+  font-size: 3vw;
+  align-items: center;
   text-align: center;
+  gap: 0px;
+  margin-bottom: .5rem;
 }
 
-.purple {
-  background-color: hsl(261, 45%, 73%);
+.heading2 {
+  margin-bottom: 0.4em;
+  text-align: left;
 }
 
-.text_border {
-  border: #cff56a;
-  border-style: solid;
-  border-width: 5px;
-  padding: 40px;
-  border-radius: 30px;
+.heading3 {
+  text-underline-offset: 10px;
+  letter-spacing: -1px;
 }
 
-.custom-navbar {
-  background-color: #e4fba1; /* Set your desired background color */
-  /* Add any other custom styles as needed */
+.heading4 {
+  font-size: 2vw;
+  margin-bottom: 52px;
+  margin-right: auto;
+  justify-content: flex-start;
+}
+
+.heading_results {
+  font-size: 3.6vw;
+  margin-bottom: 60px;
+  text-align: left;
+  margin-right: 0 auto;
+  justify-content: left;
+}
+
+.background {
+  --main-color: #9A7AD6;
+  --button-color: rgb(19, 0, 30);
+  --main-light-color: #8654ff;
+  --sec-color:#cff56a;
+
+  /* 
+  --main-color: #6c3af2;
+  --button-color: #243194;
+  --main-light-color: #8654ff;
+  --sec-color: #cff56a; */
+
+  /* --sec-color: #ffffff; */
+  background-color: var(--main-color);
 }
 
 .custom-navfont {
@@ -375,16 +549,8 @@ a {
   color: antiquewhite;
 }
 
-.photo_back {
-  background-image: url("/static/photos/sgcdesignco-NIo8Fd-RngE-unsplash.jpg"); /* Replace with the path to your image */
-  background-size: cover; /* This will make sure the image covers the entire container */
-  background-position: center center; /* This will center the image within the container */
-  background-repeat: no-repeat; /* This will prevent the image from repeating */
-  /* Add any other custom styles for the container */
-}
 
 .filter_button {
-  border: none;
   vertical-align: top;
   background-color: transparent;
 }
@@ -397,37 +563,52 @@ a:focus {
   background-color: transparent;
 }
 
-.filter_button_img {
-  width: 300px;
-  border: none;
-  padding: 20px;
-}
-
-.filter_button_img:active {
-  width: 300px;
-  border: none;
-  padding: 20px;
-  opacity: 0.6;
-}
-
-.filter_button_img:hover {
-  width: 310px;
-  padding: 0px;
-}
-
 .releae_title {
+  font-family: Right_Norm;
+}
+
+.result_text {
+  font-family: Circluar;
+  font-size: 3vw;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.extra_info {
+  font-family: Circluar_Light;
+  color: white;
+  padding-top: 4px;
+  font-size: 1.5vw;
+  margin-bottom: 2vw;
+}
+
+.result_text p,
+.result_rank {
   font-family: Circluar;
 }
 
-.result_info {
-  display: inline-block;
-  font-size: 20px;
-  color: #52265e;
+.result_rank {
+  margin-left: auto;
+  color: var(--sec-color);
+  font-size: 6vw;
+}
+
+.name1,
+.name2 {
+  margin: 0px;
+}
+
+.name1 {
+  color: white;
+  margin-left: .6vw;
 }
 
 .spinner {
-  border: 10px solid #52265e;
-  border-top: 10px solid #cff56a;
+  margin-top: 1rem;
+  border: 10px solid var(--sec-color);
+  border-top: 10px solid white;
   border-radius: 50%;
   width: 100px;
   height: 100px;
@@ -435,16 +616,6 @@ a:focus {
 }
 
 /* Custom fonts */
-
-@font-face {
-  font-family: Mori;
-  src: url(/static/fonts/Mori/PPMori-Extralight.otf);
-}
-
-@font-face {
-  font-family: Rader;
-  src: url(/static/fonts/Rader/PPRader-Bold.otf);
-}
 
 @font-face {
   font-family: Right_Norm;
@@ -491,8 +662,7 @@ a:focus {
   src: url(/static/fonts/Circluar/CircularStd-Light.otf);
 }
 
-
-/* Keyframes */ 
+/* Keyframes */
 
 @keyframes spin {
   0% {

@@ -1,105 +1,81 @@
 {% extends "layout.html" %} {% block title %} Page {% endblock %} {% block main
 %}
-
-<div class="container3">
-  <h1
-    style="
-      color: #52265e;
-      font-family: Circluar;
-      text-decoration: underline #e4fba1;
-      padding-top: 59px;
-      padding-bottom: 60px;
-    "
-  >
-    {% if years == all_time %} Your top {{ path }} of all time! {% else %} Your
-    Top {{ path }} of {% for year in years %} {% if loop.last %} {{ year }}: {%
-    else %}
-    <span style="color: #cff56a">{{ year }}, {% endif %} {% endfor %} </span>
-    {% endif %}
-  </h1>
-  <ul>
-    {% for artist, pic in results.items() %} {% if path == "Artists" %}
-
-    <li class="twosec_font_fade">
-      <a class="uri" href="{{ artist[2] }}">
-        <img src="{{ pic }}" alt="artist_pic" class="image_result" />
-      </a>
-      {{ artist [0].upper() }}
-      <br />
-      <div class="result_info">
-        You streamed
-        <div style="font-family: Circluar_It; display: inline-block">
-          {{ artist [0].upper() }}
-        </div>
-        {{ artist[1] }} times.
-      </div>
-    </li>
-    <br />
-    <br />
-    <br />
-    {% elif path == "Songs" %}
-    <li class="twosec_font_fade">
-      <a class="uri" href="{{ artist[3] }}">
-        <img src="{{ pic }}" alt="artist_pic" class="image_result" />
-      </a>
-      <div
-        style="
-          font-family: Circluar_It;
-          display: inline-block;
-          color: #52265e;
-          margin-left: 20px;
-        "
-      >
-        {{ artist[0] }}
-      </div>
-      by {{ artist [1] }}
-      <br />
-      <div class="result_info">
-        You streamed
-        <div style="font-family: Circluar_It; display: inline-block">
-          {{ artist [0]}}
-        </div>
-        {{ artist [2]}} times.
-      </div>
-    </li>
-    <br />
-    <br />
-    <br />
+<div class="swirl">
+  <div class="container3">
+    {% if years == all_time %}
+    <h1 class="heading_results">Your top {{ path }} of all time!</h1>
+    <h1 class=""></h1>
     {% else %}
-    <li class="twosec_font_fade">
-      <a class="uri" href="{{ artist[3] }}">
-        <img src="{{ pic }}" alt="artist_pic" class="image_result" />
-      </a>
-      <div
-        style="
-          font-family: Circluar_It;
-          display: inline-block;
-          color: #52265e;
-          margin-left: 20px;
-        "
-      >
-        {{ artist[0] }}
-      </div>
-      by {{ artist [1] }}
+    <h1 style="font-size: 1.5rem" class="heading_results">
+      Your Top {{ path }} of {% for year in years %} {% if loop.last %} {{ year
+      }}: {% else %} {{ year }}, {% endif %} {% endfor %} {% endif %}
+    </h1>
+
+    <ul>
+      {% for artist, pic in results.items() %} {% if path == "artists" %}
+
+      <li class="twosec_font_fade result_section">
+        <a href="{{ artist[2] }}">
+          <img src="{{ pic }}" alt="artist_pic" class="image_result" />
+        </a>
+        <div class="result_text">
+          <p class="name2">{{ artist[0].upper() }}</p>
+          <div class="result_rank">{{ loop.index }}</div>
+        </div>
+      </li>
+      <p class="extra_info">
+        You streamed {{ artist [0] }}
+        <span style="color: var(--sec-color)">{{ artist[1] }}</span> times.
+      </p>
+      <br />
       <br />
 
-      <div class="result_info">
-        You streamed
-        <div style="font-family: Circluar_It; display: inline-block">
-          {{ artist [0]}}
+      {% elif path == "songs" %}
+      <li class="twosec_font_fade result_section">
+        <a href="{{ artist[3] }}">
+          <img src="{{ pic }}" alt="artist_pic" class="image_result" />
+        </a>
+        <div class="result_text">
+          <p class="name2">{{ artist[0] }}</p>
+          <p class="name1">by {{ artist [1] }}</p>
+          <div class="result_rank">{{ loop.index }}</div>
         </div>
-        {{ artist [2]}} times.
-      </div>
-    </li>
-    <br />
-    <br />
+      </li>
+      <p class="extra_info">
+        You streamed {{ artist [0]}}
+        <span style="color: var(--sec-color)">{{ artist [2]}}</span> times.
+      </p>
+      <br />
+      <br />
+      {% else %}
+      <li class="twosec_font_fade result_section">
+        <a href="{{ artist[3] }}">
+          <img src="{{ pic }}" alt="artist_pic" class="image_result" />
+        </a>
+        <div class="result_text">
+          <p class="name2">{{ artist[0] }}</p>
+          <p class="name1">by {{ artist [1] }}</p>
+          <div class="result_rank">{{ loop.index }}</div>
+        </div>
+      </li>
+      <p class="extra_info">
+        You streamed {{ artist [0]}}
+        <span style="color: var(--sec-color)">{{ artist [2]}}</span> times.
+      </p>
+      <br />
+      <br />
 
-    {% endif %} {% endfor %}
-    <div class="go_back_container">
-      <p class="go_back_button pointer"><a href="/filter">Go back ⇦</a></p>
-    </div>
-  </ul>
+      {% endif %} {% endfor %}
+      <div class="go_back_container">
+        <p class="go_back_button pointer">
+          <a href="/filter">⇦ Back to Choices</a>
+        </p>
+        <p class="go_back_button pointer">
+          <a href="/years">⇦ Back to Years </a>
+        </p>
+      </div>
+    </ul>
+  </div>
 </div>
 
-<script defer src="/static/js/results.js"></script>
 {% endblock %}

@@ -1,104 +1,40 @@
 {% extends "layout.html" %} {% block title %} Page {% endblock %} {% block main
 %}
 
-<div id="clicker" class="font_fade container">
+<div class="container_choices">
   <form method="post" id="yearForm">
-    <ul>
-      <li>
-        <p>
-          <legend class="years_title">Choose your years:</legend>
-        </p>
+    <legend class="heading3">Choose your year(s):</legend>
 
-        <div class="right">
-          <ul>
-            <li class="year_button">
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2012"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2013"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2014"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2015"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2016"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2017"
-              />
-            </li>
-            <li class="year_button">
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2018"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2019"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2020"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2021"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2022"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2023"
-              />
-              <input
-                class="twosec_font_fade pointer"
-                type="button"
-                value="2024"
-              />
-              <input
-                id="AllHist"
-                class="pointer years_fade"
-                type="button"
-                value="All Your History"
-              />
+    <div class="container-list">
+      <ul>
+        <li class="year_button">
+          <input class="twosec_font_fade pointer" type="button" value="2012" />
+          <input class="twosec_font_fade pointer" type="button" value="2013" />
+          <input class="twosec_font_fade pointer" type="button" value="2014" />
+          <input class="twosec_font_fade pointer" type="button" value="2015" />
+          <input class="twosec_font_fade pointer" type="button" value="2016" />
+          <input class="twosec_font_fade pointer" type="button" value="2017" />
+          <input class="twosec_font_fade pointer" type="button" value="2018" />
+          <input class="twosec_font_fade pointer" type="button" value="2019" />
+          <input class="twosec_font_fade pointer" type="button" value="2020" />
+          <input class="twosec_font_fade pointer" type="button" value="2021" />
+          <input class="twosec_font_fade pointer" type="button" value="2022" />
+          <input class="twosec_font_fade pointer" type="button" value="2023" />
+          <input class="twosec_font_fade pointer" type="button" value="2024" />
+          <input
+            id="AllHist"
+            class="pointer years_fade"
+            type="button"
+            value="All Your History"
+          />
+          <input type="hidden" id="hiddenInput" name="selectedYears" />
+        </li>
+      </ul>
+    </div>
 
-              <input type="hidden" id="hiddenInput" name="selectedYears" />
-            </li>
-            <button
-              id="submit_button"
-              class="years_submit_button pointer twosec_font_fade'"
-              type="submit"
-            >
-              Go
-            </button>
-          </ul>
-        </div>
-      </li>
-    </ul>
+    <button id="submitBtn2" class="pointer twosec_font_fade'" type="submit">
+      Go <span id="subSpan" style="color: black; font-size: 20px; margin-left: 4px;">→</span>
+    </button>
   </form>
 </div>
 

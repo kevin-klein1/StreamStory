@@ -1,4 +1,5 @@
-from flask import Flask, render_template, session, request, redirect, url_for, make_response
+from flask import Flask, render_template, session, request, redirect
+from flask_caching import Cache
 import os
 from werkzeug.utils import secure_filename
 import json
@@ -19,6 +20,10 @@ ALLOWED_EXT = {'json'}
 
 ## Set up flask app
 app = Flask(__name__)
+## cache support for results
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})  
+
+
 
 
 ## Cookie config 
@@ -33,7 +38,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ## Global lists for approved years & result path
 Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023', '2024']
-Filter = ['Artists', 'Songs', 'Albums']
+Filter = ['artists', 'songs', 'albums']
 
 SCOPES = "playlist-read-collaborative user-top-read user-read-email user-read-private"
 
@@ -73,7 +78,6 @@ def index():
         return render_template("index.html")
     
     if request.method == "POST":
-
         ## Get files from browse button
         files = request.files.getlist('file')
         ## Get files from drag and drop
@@ -83,6 +87,8 @@ def index():
         upload_files(files)
         upload_files(files2)
 
+        ## Clear cache if new user uploads data
+        cache.clear()
         return redirect("/years")
     
         
@@ -97,7 +103,6 @@ def years():
         ## Get list of years user wants to filter
         selected_years_unconverted = request.form.getlist('selectedYears')
 
-        print(selected_years_unconverted)
 
         for year in selected_years_unconverted:
             session['selected_years'] = year.split(',')
@@ -107,6 +112,10 @@ def years():
             if year not in Approved_years:
                 message = "Years not valid!"
                 return render_template("error.html", message=message,path=request.path.strip("/").title())
+        
+        ## safety measure to ensure year isn't in session twice
+        session['selected_years'] = list(dict.fromkeys(session['selected_years']))
+
         return redirect("/filter")
 
 
@@ -129,14 +138,23 @@ def results():
     if request.method == "GET":
 
         ## Get's path (artist, song, albums) from previous form fron url paras. Handled by JS. 
-        selected_option = request.args.get('selection')
+        selected_option = request.args.get('selection').lower()
         ## assign that value to the session path
         session['path'] = selected_option
 
         ## Handle error if path doesn't exist
         if not selected_option or selected_option not in Filter:
             message = "Not a Valid Option!"
-            return render_template("error.html", message=message, path=request.path.strip("/").title())
+            return render_template("error.html", message=message)
+        
+        ## Create cache key
+        cache_key = f"{selected_option}_{'_'.join(session['selected_years'])}"
+
+        # Check if cached results already exist
+        cached_results = cache.get(cache_key)
+
+        if cached_results is not None:
+            return render_template('results.html', path=session['path'], years=session['selected_years'], results=cached_results, all_time=Approved_years)
 
         ## Set up folder path to json files and get file names
         folder_path = os.path.join(app.root_path, 'json_files')
@@ -177,6 +195,8 @@ def results():
 
             if artist == None:
                 continue
+            if artist == "Valleyheart":
+                continue
         
             ## Artist Dictionary
             if artist in favs:
@@ -199,7 +219,7 @@ def results():
 
         ## Make sure theres data in the dictionaries, if not - return error page
         if len(favs) == 0:
-            return render_template("error.html", message="Please upload your data!", path='Homepage')
+            return render_template("error.html", message="No data for those years :(", path='Homepage')
 
 
         ## Set up Top Ten Dictionary
@@ -213,7 +233,7 @@ def results():
              return render_template("error.html", message="Something went wrong :(", path=request.path)
 
         
-        if session['path'] == "Artists":
+        if session['path'] == "artists":
             ## Sort Artists for Top Ten in sorted dict   
             sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
             convert_favs = dict(sorted_favs)
@@ -234,7 +254,7 @@ def results():
                 if counter == 10:
                     break 
         
-        if session['path'] == "Songs":
+        if session['path'] == "songs":
             ## Sort
             sorted_songs = sorted(songs.items(), key=lambda x:x[1], reverse=True)
             convert_songs = dict(sorted_songs)
@@ -283,7 +303,7 @@ def results():
                     break 
 
 
-        if session['path'] == "Albums":
+        if session['path'] == "albums":
 
     
             sorted_albums = sorted(albums.items(), key=lambda x:x[1], reverse=True)
@@ -308,12 +328,11 @@ def results():
                     results[(album,artist,number, album_uri)] = album_pic
                 else:
                     results[(album,artist,number, artist_uri)] = artist_pic
-                    print()
                 counter_album += 1
                 if counter_album == 10:
                     break
-
-        f.close()
+        ## set cache 
+        cache.set(cache_key, results)
         return render_template('results.html',path=session['path'],years=session['selected_years'], results=results, all_time=Approved_years)
 
 

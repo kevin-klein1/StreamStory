@@ -1,18 +1,43 @@
+/* Need to fix bugs with rejecting already uploaded files. Drag and Drop wrongly
+allows old files to be redropped. Browse won't let old files come in, if it's the only file selected.
+But if there is a 'new' file with it, it will bypass the logic and allow it to be displayed.
+
+The issue lies in the fact that the Display File Name function doesn't check for old files. So if it works it will 
+display all names. I wonder if we could ad a check inside function.*/
+
 let droppedFiles = [];
 let formData = new FormData();
+
+const browseButton = document.getElementById("browseButton");
+
+// Get Hex value for dynamically changing drag and drop
+const purple = document.querySelector(".background");
+const computedStyle = getComputedStyle(purple);
+const mainColor = computedStyle.getPropertyValue("--main-color").trim();
+const secColor = computedStyle.getPropertyValue("--sec-color").trim();
+
+const dropArea = document.getElementById("drop-area");
+
+const dropText = "Drop!";
 
 document
   .getElementById("drop-area")
   .addEventListener("dragover", function (event) {
     event.preventDefault();
-    this.style.backgroundColor = "#f0f0f0";
+    this.style.backgroundColor = secColor;
+    this.style.color = "black";
+    this.style.borderColor = mainColor;
+    browseButton.style.color = mainColor;
   });
 
 document
   .getElementById("drop-area")
   .addEventListener("dragleave", function (event) {
     event.preventDefault();
-    this.style.backgroundColor = "rgb(228, 175, 228)";
+    this.style.backgroundColor = mainColor;
+    this.style.color = "white";
+    this.style.borderColor = secColor;
+    browseButton.style.color = secColor;
   });
 
 document.getElementById("drop-area").addEventListener("drop", function (event) {
@@ -29,31 +54,26 @@ document.getElementById("drop-area").addEventListener("drop", function (event) {
       let fileExtension = fileName.split(".").pop().toLowerCase();
 
       if (!ApprovedExt.includes(fileExtension)) {
-        alert("Please upload file of type .JSON");
+        alert(`File named: "${file.name}" is invalid. Please upload file of type .JSON`);
         fileExtensionCheckFailed = true;
-        break;
+        continue;
       }
       if (!isFileAlreadyUploaded(file)) {
         droppedFiles.push(file);
+        displayFileNames(file);
       }
+      // if (!fileExtensionCheckFailed) {
+      //   displayFileNames(file);
+      // }
     }
-    console.log(fileExtensionCheckFailed);
-
-    if (!fileExtensionCheckFailed) {
-      displayFileNames(droppedFiles);
-      this.style.backgroundColor = "#f0f0f0";
-      this.style.borderColor = "green";
-      let button = document.getElementById("browseButton");
-      button.style.color = "#1DB954";
-      button.style.fontWeight = "bold";
-    }
-    this.style.backgroundColor = "rgb(228, 175, 228)";
-    this.style.border = "2px dashed #CFF56A";
-    this.style.color = "black";
+    this.style.backgroundColor = mainColor;
+    this.style.color = "white";
+    this.style.borderColor = secColor;
+    browseButton.style.color = secColor;
   }
-
   let file_input = document.getElementById("fileInput2");
   file_input.files = files;
+  console.log(files);
 });
 
 document.getElementById("browseButton").addEventListener("click", function () {
@@ -64,11 +84,6 @@ document
   .getElementById("fileInput")
   .addEventListener("change", function (event) {
     event.preventDefault();
-    this.style.backgroundColor = "#f0f0f0";
-
-    let button = document.getElementById("browseButton");
-    button.style.color = "#1DB954";
-    button.style.fontWeight = "bold";
 
     let files = this.files;
 
@@ -77,9 +92,9 @@ document
         let file = files[i];
         if (!isFileAlreadyUploaded(file)) {
           droppedFiles.push(file);
+          displayFileNames(file);
         }
       }
-      displayFileNames(droppedFiles);
     }
   });
 
@@ -95,19 +110,13 @@ function isFileAlreadyUploaded(file) {
   return false;
 }
 
-function displayFileNames(files) {
-  var fileNames = [];
-  for (var i = 0; i < files.length; i++) {
-    fileNames.push(files[i].name);
-  }
-
-  document.getElementById("file-list").innerHTML = fileNames.join("<br>");
-  document.getElementById("file-list").style.textDecoration = "underline";
-  document.getElementById("file-list").style.fontWeight = "bold";
-  document.getElementById("file-list").style.fontSize = "14px";
-  document.getElementById("file-list").style.color = "purple";
-  document.getElementById("file-list").style.fontStyle = "italic";
-  document.getElementById("file-list").style.padding = "1px";
-  document.getElementById("file-list").style.display = "block";
-  document.getElementById("submitBtn").style.display = "block";
+function displayFileNames(file) {
+  // Access the file name directly
+  document.getElementById("file-list").innerHTML += "<br>" + file.name;
+  document.getElementById("file-list").style.display = "flex";
+  document.getElementById("submitBtn").style.display = "flex";
 }
+
+document.getElementById("submitBtn").addEventListener("click", function () {
+  document.getElementById("uploadForm").submit();
+});

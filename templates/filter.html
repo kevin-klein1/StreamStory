@@ -1,38 +1,46 @@
 {% extends "layout.html" %} {% block title %} Page {% endblock %} {% block main
 %}
 <!-- Loading screen (initially hidden) -->
-<div id="loading-screen" class="container" style="display: none">
-  <p>Loading your Spotify data...</p>
-  <div class="spinner"></div>
-</div>
+<div class="container_choices">
+  <div id="loading-screen" style="display: none">
+    <p>Loading your Spotify data...</p>
+    <div class="spinner"></div>
+  </div>
 
-<div id="filter_div" class="container font_fade centered_message">
-  <!-- No need for method="post" anymore since JS handles the redirection -->
-  <input type="hidden" id="selectionInput" name="selection" value="" />
-  <p>What kind of info are you interested in?</p>
-  <div>
-    <!-- Each button has a 'data-value' attribute corresponding to the selection -->
-    <button class="pointer filter_button" type="button" data-value="Artists">
-      <img
-        class="filter_button_img"
-        src="/static/photos/artist.png"
-        alt="artist"
-      />
+  <form id="filterForm">
+    <legend class="heading3">Choose one option:</legend>
+
+    <div class="container-list">
+      <ul>
+        <li class="year_button">
+          <input
+            class="twosec_font_fade filter_button pointer"
+            type="button"
+            value="ARTISTS"
+          />
+          <input
+            class="twosec_font_fade filter_button pointer"
+            type="button"
+            value="SONGS"
+          />
+          <input
+            class="twosec_font_fade filter_button pointer"
+            type="button"
+            value="ALBUMS"
+          />
+        </li>
+      </ul>
+    </div>
+
+    <!-- Hidden input to store the selected value -->
+    <input type="hidden" id="selectionInput" name="selection" value="" />
+
+    <button id="submitBtn2" class="pointer twosec_font_fade" type="submit">
+      Go <span style="color: black; font-size: 20px; margin-left: 4px">→</span>
     </button>
-    <button class="pointer filter_button" type="button" data-value="Songs">
-      <img
-        class="filter_button_img"
-        src="/static/photos/songs.png"
-        alt="songs"
-      />
-    </button>
-    <button class="pointer filter_button" type="button" data-value="Albums">
-      <img
-        class="filter_button_img"
-        src="/static/photos/albums.png"
-        alt="albums"
-      />
-    </button>
+  </form>
+  <div  id="go_back_container" class="go_back_container">
+    <p style="margin-top: auto;"class="go_back_button pointer"><a href="/years">⇦ Back to Years </a></p>
   </div>
 </div>
 
