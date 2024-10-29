@@ -21,6 +21,8 @@ StreamStory is an app built with Python/Flask that takes Extended Spotify Stream
 
 4) See .env_sample file for instructions on API key setup for testing. Go to <a href="https://developer.spotify.com/" target="_bank">Spotify For Developers</a> to retrieve your keys. 
 
+5) Enter command "flask run" or "flask run --debug" in terminal to get the server up and running. 
+
 ## Library Packages
 
 * [Flask](https://flask.palletsprojects.com/en/3.0.x/)
