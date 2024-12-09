@@ -216,7 +216,7 @@ def results():
 
         ## Make sure theres data in the dictionaries, if not - return error page
         if len(favs) == 0:
-            return render_template("error.html", message="No data for those years :(", path='Homepage')
+            return render_template("error.html", message="No data for those years.", path='Homepage')
 
 
         ## Set up Top Ten Dictionary
@@ -311,9 +311,12 @@ def results():
             for (album, artist), number in convert_albums.items():
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
-                artist_pic = artist_info[0]
-                artist_id = artist_info[1]
-                artist_uri = artist_info[2]
+                if artist_info != None:
+                    artist_pic = artist_info[0]
+                    artist_id = artist_info[1]
+                    artist_uri = artist_info[2]
+                else:
+                    artist_pic = "static/photos/smile.png"
 
                 album_info = helpers.search_for_album(spotify, artist_id, album)
 
@@ -342,11 +345,12 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     # Custom 500 error handler
+    print("flaf")
     return render_template('500.html'), 500
 
     
 
-# if __name__ == '__main__':
-#     app.run(debug=False, port=5005)
+if __name__ == '__main__':
+    app.run(debug=False, port=5005)
 
     

@@ -1,7 +1,12 @@
 {% extends "layout.html" %} {% block title %} Page {% endblock %} {% block main
 %}
-<div class="container centered_message">
-  <p>404 Error. Page Not Found :(</p>
-</div>
+
+  <div style="align-items: center" class="container centered_message">
+    <p class="error_message">404 Error. Page Not Found</p>
+    <div>
+      <img id="sadface" src="/static/photos/smilesad.png" />
+    </div>
+  </div>
+
 
 {% endblock %}

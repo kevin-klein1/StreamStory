@@ -17,16 +17,19 @@
             class="twosec_font_fade filter_button pointer"
             type="button"
             value="ARTISTS"
+            id="artists"
           />
           <input
             class="twosec_font_fade filter_button pointer"
             type="button"
             value="SONGS"
+            id="songs"
           />
           <input
             class="twosec_font_fade filter_button pointer"
             type="button"
             value="ALBUMS"
+            id="albums"
           />
         </li>
       </ul>
@@ -36,12 +39,15 @@
     <input type="hidden" id="selectionInput" name="selection" value="" />
 
     <button id="submitBtn2" class="pointer twosec_font_fade" type="submit">
-      Go <span style="color: black; font-size: 20px; margin-left: 4px">→</span>
+      Go <span class="submit_arrow" id="subSpan">→</span>
     </button>
   </form>
-  <div  id="go_back_container" class="go_back_container">
-    <p style="margin-top: auto;"class="go_back_button pointer"><a href="/years">⇦ Back to Years </a></p>
-  </div>
+  <div id="go_back_container" class="go_back_container"></div>
+  <footer>
+    <p class="go_back_button pointer">
+      <a href="/years">⇦ Back to Years </a>
+    </p>
+  </footer>
 </div>
 
 <!-- Your existing JS to handle the selection and redirection -->
