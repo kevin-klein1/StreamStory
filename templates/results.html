@@ -6,7 +6,7 @@
     <h1 class="heading_results">Your top {{ path }} of all time!</h1>
     <h1 class=""></h1>
     {% else %}
-    <h1 style="font-size: 1.5rem" class="heading_results">
+    <h1 class="heading_results2">
       Your Top {{ path }} of {% for year in years %} {% if loop.last %} {{ year
       }}: {% else %} {{ year }}, {% endif %} {% endfor %} {% endif %}
     </h1>
@@ -36,8 +36,8 @@
           <img src="{{ pic }}" alt="artist_pic" class="image_result" />
         </a>
         <div class="result_text">
-          <p class="name2">{{ artist[0] }}</p>
-          <p class="name1">by {{ artist [1] }}</p>
+          <p class="name4">{{ artist[0] }}&nbsp;</p>
+          <p class="name3">{{ artist [1] }}</p>
           <div class="result_rank">{{ loop.index }}</div>
         </div>
       </li>
@@ -53,9 +53,9 @@
           <img src="{{ pic }}" alt="artist_pic" class="image_result" />
         </a>
         <div class="result_text">
-          <p class="name2">{{ artist[0] }}</p>
-          <p class="name1">by {{ artist [1] }}</p>
-          <div class="result_rank">{{ loop.index }}</div>
+          <p class="name4">{{ artist[0] }}</p>
+          <p class="name3">{{ artist [1] }}</p>
+          <div class="result_rank right-aligned">{{ loop.index }}</div>
         </div>
       </li>
       <p class="extra_info">
@@ -67,10 +67,10 @@
 
       {% endif %} {% endfor %}
       <div class="go_back_container">
-        <p class="go_back_button pointer">
+        <p class="go_back_button2 pointer">
           <a href="/filter">⇦ Back to Choices</a>
         </p>
-        <p class="go_back_button pointer">
+        <p class="go_back_button2 pointer">
           <a href="/years">⇦ Back to Years </a>
         </p>
       </div>

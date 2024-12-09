@@ -65,7 +65,6 @@ year_buttons.forEach((button, index) => {
         }
 
         lastSelectedIndex = index; // Update last selected index
-        console.log(answers);
     });
 });
 

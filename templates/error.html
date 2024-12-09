@@ -1,12 +1,16 @@
 {% extends "layout.html" %} {% block title %} Page {% endblock %} {% block main
 %}
 
-<div class="container">
+<div style="align-items: center" class="container centered_message">
   <p class="error_message">{{ message }}</p>
-  <br />
-  <div class="go_back_container">
-    <a class="go_back_button" href="/filter">Go Back</a>
+  <div>
+    <img id="sadface" src="/static/photos/smilesad.png" />
   </div>
+  <footer>
+    <p class="go_back_button pointer">
+      <a href="/filter">⇦ Go Back </a>
+    </p>
+  </footer>
 </div>
 
 {% endblock %}
