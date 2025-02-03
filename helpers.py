@@ -36,14 +36,20 @@ def search_for_artist_info(spotify, artist):
     results = spotify.search(q='artist:' + artist, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
-        artist = items[0]
-        id = artist['id']
-        try:
-            result = artist['images'][0]['url']
-        except IndexError:  
-            result = None
-        uri = artist['uri']
-        return result, id, uri 
+        artist_info = items[0]
+        if artist_info['name'] != artist:
+            pic = None
+            id = None
+            uri = None
+        else:
+            id = artist_info['id']
+            uri = artist_info['uri']
+            
+            try:
+                pic = artist_info['images'][0]['url']
+            except IndexError:  
+                pic = None
+        return pic, id, uri 
 
 
 def search_for_album(spotify, id, album): 

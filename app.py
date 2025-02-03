@@ -238,11 +238,15 @@ def results():
             counter = 0
             ## insert top ten for artists
             for artist, number in convert_favs.items():
+            
                 ## Get tuple of artist info with Spotify API call
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
                 artist_pic = artist_info[0]
                 artist_uri = artist_info[2]
+
+                if artist_pic is None:
+                    artist_pic = "static/photos/smilesqrblack.png"
 
                 ## Insert into results all info and picture
                 results[artist, number, artist_uri] = artist_pic
@@ -311,7 +315,7 @@ def results():
             for (album, artist), number in convert_albums.items():
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
-                if artist_info != None:
+                if artist_info[0] != None:
                     artist_pic = artist_info[0]
                     artist_id = artist_info[1]
                     artist_uri = artist_info[2]
@@ -319,6 +323,7 @@ def results():
                     artist_pic = "static/photos/smile.png"
 
                 album_info = helpers.search_for_album(spotify, artist_id, album)
+
 
                 if album_info != None:
 
