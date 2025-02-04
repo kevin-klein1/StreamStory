@@ -192,8 +192,6 @@ def results():
 
             if artist == None:
                 continue
-            if artist == "Valleyheart":
-                continue
         
             ## Artist Dictionary
             if artist in favs:
@@ -242,15 +240,29 @@ def results():
                 ## Get tuple of artist info with Spotify API call
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
+                ## Checks for cases where artist name wasn't matched with Correct API result
+                ## Assigns default photo and None uri link
+                if artist_info == (None, None, None):
+                    artist_pic = "static/photos/smilesqrblack.png"
+                    artist_uri = None
+
+                    results[artist, number, artist_uri] = artist_pic
+                    if counter == 10:
+                        break
+                    continue
+
+                ## Assign vars for rendering
                 artist_pic = artist_info[0]
                 artist_uri = artist_info[2]
 
+                ## Another catch all in case just Artist photo is None. Assign placeholder StreamStory image if artist_pic is None
                 if artist_pic is None:
                     artist_pic = "static/photos/smilesqrblack.png"
 
                 ## Insert into results all info and picture
                 results[artist, number, artist_uri] = artist_pic
 
+                ## Update counter and break loop at 10. 
                 counter += 1
                 if counter == 10:
                     break 
@@ -267,7 +279,13 @@ def results():
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
                 ## Some artist_info comes back empty, if that's the case abort to avoid error
-                if artist_info is None:
+                if artist_info == (None, None, None):
+
+                    song_uri = None
+                    album_pic = "static/photos/smilesqrblack.png"
+                    results[(song,artist,number,song_uri)] = album_pic
+                    if counter == 10:
+                        break
                     continue
 
                 ## Some artist_info comes back empty, if that's the case abort to avoid error
@@ -282,7 +300,7 @@ def results():
                     artist_pic = "static/photos/smil.jpeg"
                     
                 ## API call to get album information
-                album_info = helpers.search_for_album(spotify, artist_id, album)
+                album_info = helpers.search_for_album(spotify, artist_id, album, artist_uri)
 
 
                 ## Make sure this isn't Null + if it is: just display the artist picture. 
@@ -315,6 +333,15 @@ def results():
             for (album, artist), number in convert_albums.items():
                 artist_info = helpers.search_for_artist_info(spotify, artist)
 
+                if artist_info == (None, None, None):
+
+                    artist_uri = None
+                    album_pic = "static/photos/smilesqrblack.png"
+                    results[(song,artist,number,artist_uri)] = album_pic
+                    if counter == 10:
+                        break
+                    continue
+
                 if artist_info[0] != None:
                     artist_pic = artist_info[0]
                     artist_id = artist_info[1]
@@ -322,7 +349,7 @@ def results():
                 else:
                     artist_pic = "static/photos/smile.png"
 
-                album_info = helpers.search_for_album(spotify, artist_id, album)
+                album_info = helpers.search_for_album(spotify, artist_id, album, artist_uri)
 
 
                 if album_info != None:

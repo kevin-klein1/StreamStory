@@ -15,9 +15,13 @@
       {% for artist, pic in results.items() %} {% if path == "artists" %}
 
       <li class="twosec_font_fade result_section">
+        {% if artist[2] is not none %}
         <a href="{{ artist[2] }}">
           <img src="{{ pic }}" alt="artist_pic" class="image_result" />
         </a>
+        {% else %}
+        <img src="{{ pic }}" alt="artist_pic" class="image_result no-hover" />
+        {% endif %}
         <div class="result_text">
           <p class="name2">{{ artist[0].upper() }}</p>
           <div class="result_rank">{{ loop.index }}</div>
@@ -32,9 +36,13 @@
 
       {% elif path == "songs" %}
       <li class="twosec_font_fade result_section">
+        {% if artist[3] is not none %}
         <a href="{{ artist[3] }}">
           <img src="{{ pic }}" alt="artist_pic" class="image_result" />
         </a>
+        {% else %}
+        <img src="{{ pic }}" alt="artist_pic" class="image_result no-hover" />
+        {% endif %}
         <div class="result_text">
           <p class="name4">{{ artist[0] }}&nbsp;</p>
           <p class="name3">{{ artist [1] }}</p>
@@ -49,9 +57,13 @@
       <br />
       {% else %}
       <li class="twosec_font_fade result_section">
+        {% if artist[3] is not none %}
         <a href="{{ artist[3] }}">
           <img src="{{ pic }}" alt="artist_pic" class="image_result" />
         </a>
+        {% else %}
+        <img src="{{ pic }}" alt="artist_pic" class="image_result no-hover" />
+        {% endif %}
         <div class="result_text">
           <p class="name4">{{ artist[0] }}</p>
           <p class="name3">{{ artist [1] }}</p>

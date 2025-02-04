@@ -524,6 +524,10 @@ a {
   margin-bottom: 0px;
 }
 
+.no-hover:hover {
+  cursor: default;
+  border-width: 0px;
+}
 .padding {
   padding: 20px;
 }

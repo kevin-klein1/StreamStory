@@ -33,34 +33,40 @@ def merge_json(files, output_file):
 
 
 def search_for_artist_info(spotify, artist):
+
+    ## Makes Spotify API Query
     results = spotify.search(q='artist:' + artist, type='artist')
+
+    ## returns items found for that aritst
     items = results['artists']['items']
+
+    ## if something is found, assign fields
     if len(items) > 0:
-        artist_info = items[0]
-        if artist_info['name'] != artist:
+
+
+        match = next((artist_v for artist_v in items if artist_v['name'] == artist), None)
+        artist_info = match
+
+        if not match:
             pic = None
             id = None
             uri = None
         else:
             id = artist_info['id']
             uri = artist_info['uri']
-            
             try:
                 pic = artist_info['images'][0]['url']
             except IndexError:  
                 pic = None
+        ## return artist photo, id, and link 
         return pic, id, uri 
 
 
-def search_for_album(spotify, id, album): 
-    artist_uri = "spotify:artist:" + id
+def search_for_album(spotify, id, album, artist_uri): 
     results = spotify.artist_albums(artist_uri, album_type='album')
     albums_list = results['items']
     for record in albums_list:
         current_album_name = record['name']
-        ##print()
-        ##print(f"{current_album_name} == {album}")
-        ##print()
         current_album_name = current_album_name.lower()
         if album.lower() == current_album_name:
             return record['images'][0]['url'], record['uri'], record['id']
