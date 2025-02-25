@@ -244,6 +244,10 @@ def results():
                 ## Select best artist match with this function
                 artist_info = helpers.verify_artist(spotify, potential_artists, songs)
 
+                ## Pass on artist whose profile is null 
+                if not artist_info:
+                    continue
+
                 ## Assign vars for rendering
                 artist_pic = artist_info[0]
                 artist_uri = artist_info[2]

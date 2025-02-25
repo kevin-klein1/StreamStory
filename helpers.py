@@ -36,6 +36,7 @@ def search_for_artist_info(spotify, artist):
     # Make the API call to search for artists by name
     results = spotify.search(q='artist:' + artist, type='artist')
 
+
     # Extract items (artists) from the response. Returns an object of potential artsts
     items = results['artists']['items']
 
@@ -69,48 +70,39 @@ def search_for_artist_info(spotify, artist):
 
 def verify_artist(spotify, matches, user_data):
 
-    ## For each match, try to find by match by comparing user data with artist top songs or albums
+    ## For each match, try to find by match by comparing user data with artist total songs 
     for artist in matches:
         artist_id = artist['id']
             
-        ## API Call. Get the artist's top tracks
-        top_tracks = spotify.artist_top_tracks(artist_id)['tracks']
-    
-        top_track_names = [track['name'].lower() for track in top_tracks]
+        ## Create empty list to store album ids
+        album_ids = []
+
+        ## Aggregate song bank of all artist's songs
+        song_bank = []
+
+        ## Fetch artist's albums
+        artist_albums = spotify.artist_albums(artist_id=artist_id)['items']
+
+        ## Append list of each album ids 
+        for album in artist_albums:
+            album_ids.append(album['id'])
         
-        ## Get the artist's albums
-        albums = spotify.artist_albums(artist_id, album_type='album')['items']
-        album_names = [album['name'].lower() for album in albums]
-        
-        ## Check if any of the user's songs from top tracks
+        ## Fetch album info for all artist's albums
+        albums_info = spotify.albums(album_ids)['albums']
+
+        ## For each album, get all track names and append to song_bank
+        for album in albums_info:
+            for track in album['tracks']['items']:
+                song_bank.append(track['name'])
+        ## Check if song/artist stream in current user's data, is found in song bank + artist names match
         for user_song in user_data:
-            ## If song found and artist name matches, return 
-            if user_song[0].lower() in top_track_names and user_song[1].lower() == matches[0]['name'].lower():
-                return artist['picture'], artist['id'], artist['uri'], artist['name']
+            if user_song[0] in song_bank and user_song[1].lower() == artist['name'].lower():
+                return artist['picture'], artist['id'], artist['uri'], artist['name']    
 
-        ## If user data isn't found in song compare, search for album match
-        for user_album in user_data:
+    ## If none found, return None
+    return None
 
-            ## Check if album name in API list
-            if user_album[2].lower() in album_names:
 
-                ## Get album info from helper func
-                album_data = search_for_album(spotify, user_album[2], artist['uri'])[2]
-                album_tracks_info = get_album_tracks(spotify, album_data)
-
-                for song in album_tracks_info:
-
-                    ## Formatting
-                    song_id = f"spotify:track:" + song['id']
-
-                    ## If the uri match. Bug here though - sometimes
-                    if user_album[3] == song_id:
-                        return artist['picture'], artist['id'], artist['uri'], artist['name']
-                    
-    # If no good matches found, return original top list match from potential matches
-    fallback = ("static/photos/smilesqrblack.png", None, None, matches[0]['name'])
-
-    return fallback
 
 
 def search_for_album(spotify, album, artist_uri): 
