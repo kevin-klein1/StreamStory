@@ -236,10 +236,8 @@ def results():
 
             counter = 0
             ## insert top ten for artists
-            for artist, number in convert_favs.items():
-
-                
-            
+            for artist, number in convert_favs.items():  
+                  
                 ## Get tuple of potential artists with current artist name
                 potential_artists = helpers.search_for_artist_info(spotify, artist)
 
