@@ -34,7 +34,8 @@ StreamStory is an app built with Python/Flask that takes Extended Spotify Stream
   
 <br>
 <br>
-<img width="1728" alt="Screenshot 2025-02-27 at 2 57 09 PM" src="https://github.com/user-attachments/assets/96c7aa37-7c41-497c-b818-3cfe749e70f2" />
+
+<img width="854" alt="Screenshot 2025-02-27 at 3 01 46 PM" src="https://github.com/user-attachments/assets/757fced3-15c9-49b6-9cce-5d344e6b95df" />
 
 
 
