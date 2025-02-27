@@ -228,7 +228,7 @@ def results():
         except Exception:
              return render_template("error.html", message="Something went wrong :(", path=request.path)
 
-        
+        ## Paths are Artist, Song, and Albums
         if session['path'] == "artists":
             ## Sort Artists for Top Ten in sorted dict   
             sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
@@ -271,20 +271,13 @@ def results():
 
 
             counter_songs = 0
-            ## Insert
             for (song,artist,album, uri), number in convert_songs.items():
 
                 potential_artists = helpers.search_for_artist_info(spotify, artist)
                 artist_info = helpers.verify_artist(spotify, potential_artists, songs)
 
-                ## Some artist_info comes back empty, if that's the case abort to avoid error
-                if artist_info == (None, None, None):
-
-                    song_uri = None
-                    album_pic = "static/photos/smilesqrblack.png"
-                    results[(song,artist,number,song_uri)] = album_pic
-                    if counter == 10:
-                        break
+                ## Pass on artist whose profile is null 
+                if not artist_info:
                     continue
 
                 ## Some artist_info comes back empty, if that's the case abort to avoid error
@@ -323,26 +316,30 @@ def results():
 
         if session['path'] == "albums":
 
-    
+            ## Sort
             sorted_albums = sorted(albums.items(), key=lambda x:x[1], reverse=True)
             convert_albums = dict(sorted_albums)
 
             counter_album = 0
-            
-            for (album, artist), number in convert_albums.items():
-                potential_artists = helpers.search_for_artist_info(spotify, artist)
 
+            ## Top Ten Albums
+            for (album, artist), number in convert_albums.items():
+
+                potential_artists = helpers.search_for_artist_info(spotify, artist)
                 artist_info = helpers.verify_artist(spotify, potential_artists, songs)
 
+                ## Pass if artist not found
+                if not artist_info:
+                    continue
    
                 artist_pic = artist_info[0]
                 artist_id = artist_info[1]
                 artist_uri = artist_info[2]
-            
 
+                ## Fetch album info
                 album_info = helpers.search_for_album(spotify, album, artist_uri)
 
-
+                ## If album comes back None, will display default artist image
                 if album_info != None:
 
                     album_pic = album_info[0]
@@ -351,6 +348,7 @@ def results():
                     results[(album,artist,number, album_uri)] = album_pic
                 else:
                     results[(album,artist,number, artist_uri)] = artist_pic
+
                 counter_album += 1
                 if counter_album == 10:
                     break

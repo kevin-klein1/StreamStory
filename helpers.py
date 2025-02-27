@@ -107,13 +107,22 @@ def verify_artist(spotify, matches, user_data):
 
 def search_for_album(spotify, album, artist_uri): 
 
+    ## If no uri is present return None
     if not artist_uri:
         return None
+    
+    ## Fetch Artist's albums
     results = spotify.artist_albums(artist_uri, album_type='album')
     albums_list = results['items']
+
+    ## Search for album match in object
     for record in albums_list:
+
+        ## Current record's name
         current_album_name = record['name']
         current_album_name = current_album_name.lower()
+
+        ## If target album == our album, return
         if album.lower() == current_album_name:
             return record['images'][0]['url'], record['uri'], record['id']
         elif album.lower() in current_album_name:
