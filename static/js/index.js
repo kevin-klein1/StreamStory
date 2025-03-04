@@ -8,6 +8,25 @@ display all names. I wonder if we could ad a check inside function.*/
 let droppedFiles = [];
 let formData = new FormData();
 
+// Add DataTransfer object to track all files
+let allFiles;
+
+// Check if DataTransfer is supported by the browser
+if (typeof DataTransfer !== "undefined") {
+  allFiles = new DataTransfer();
+} else {
+  console.warn(
+    "Your browser may not fully support batched file uploads. Please upload all files at once."
+  );
+  // Simple fallback object with no-op functions
+  allFiles = {
+    items: {
+      add: function () {}, // No-op function
+    },
+    files: [],
+  };
+}
+
 const browseButton = document.getElementById("browseButton");
 
 // Get Hex value for dynamically changing drag and drop
@@ -54,12 +73,18 @@ document.getElementById("drop-area").addEventListener("drop", function (event) {
       let fileExtension = fileName.split(".").pop().toLowerCase();
 
       if (!ApprovedExt.includes(fileExtension)) {
-        alert(`File named: "${file.name}" is invalid. Please upload file of type .JSON`);
+        alert(
+          `File named: "${file.name}" is invalid. Please upload file of type .JSON`
+        );
         fileExtensionCheckFailed = true;
         continue;
       }
       if (!isFileAlreadyUploaded(file)) {
         droppedFiles.push(file);
+        // Add to our DataTransfer object to collect all files
+        if (typeof DataTransfer !== "undefined") {
+          allFiles.items.add(file);
+        }
         displayFileNames(file);
       }
       // if (!fileExtensionCheckFailed) {
@@ -70,7 +95,14 @@ document.getElementById("drop-area").addEventListener("drop", function (event) {
     this.style.color = "white";
     this.style.borderColor = secColor;
     browseButton.style.color = secColor;
+
+    // Update the file input with ALL files collected so far
+    if (typeof DataTransfer !== "undefined") {
+      document.getElementById("fileInput").files = allFiles.files;
+    }
   }
+
+  // Still keep this for backward compatibility, but primary submission will use fileInput
   let file_input = document.getElementById("fileInput2");
   file_input.files = files;
   console.log(files);
@@ -92,8 +124,20 @@ document
         let file = files[i];
         if (!isFileAlreadyUploaded(file)) {
           droppedFiles.push(file);
+          // Add to our DataTransfer object
+          if (typeof DataTransfer !== "undefined") {
+            allFiles.items.add(file);
+          }
           displayFileNames(file);
         }
+      }
+
+      // Update the fileInput element with all accumulated files
+      if (typeof DataTransfer !== "undefined") {
+        // We need to do this in a setTimeout to avoid recursive change events
+        setTimeout(() => {
+          document.getElementById("fileInput").files = allFiles.files;
+        }, 0);
       }
     }
   });
@@ -118,5 +162,16 @@ function displayFileNames(file) {
 }
 
 document.getElementById("submitBtn").addEventListener("click", function () {
+  console.log("Files in droppedFiles array:", droppedFiles.length);
+  console.log(
+    "Files in fileInput:",
+    document.getElementById("fileInput").files.length
+  );
+  console.log(
+    "Files in fileInput2:",
+    document.getElementById("fileInput2").files.length
+  );
+
+  // Submit the form with all collected files
   document.getElementById("uploadForm").submit();
 });
