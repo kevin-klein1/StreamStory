@@ -370,8 +370,8 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 
-port = int(os.getenv('PORT', 5000))   
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port)
+# port = int(os.getenv('PORT', 5000))
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=port)
 
     
