@@ -25,7 +25,7 @@ ALLOWED_EXT = {'json'}
 
 ## Cookie config 
 app.config['SESSION_COOKIE_NAME'] = 'User Cookie'
-app.secret_key = '123g834#$9gsfg54'
+app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
 TOKEN_INFO = "token_info"
 
 
@@ -369,9 +369,9 @@ def internal_server_error(e):
     print("flaf")
     return render_template('500.html'), 500
 
-    
 
+port = int(os.getenv('PORT', 5000))   
 if __name__ == '__main__':
-    app.run(debug=False, port=5005)
+    app.run(host='0.0.0.0', port=port)
 
     
