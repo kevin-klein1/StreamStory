@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, redirect
+from flask import Flask, render_template, session, request, redirect, jsonify
 from flask_caching import Cache
 import os
 from werkzeug.utils import secure_filename
@@ -7,6 +7,7 @@ import datetime
 import helpers
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from streaming_helpers import process_streaming_data
 
 
 
@@ -80,13 +81,23 @@ def index():
         ## Get files from drag and drop
         files2 = request.files.getlist('file2')
 
-        ## Upload files into project
-        upload_files(files)
-        upload_files(files2)
+        ## Process files directly using streaming (no saving to disk)
+        top_artists, top_songs, top_albums, song_artist = helpers.merge_json_streaming(files + files2)
+
+
+
+        ## Store results in session (so it persists when user goes to /years)
+        session['top_artists'] = top_artists
+        session['top_songs'] = top_songs
+        session['top_albums'] = top_albums
+        session['song_artist'] = song_artist
+
+        print(session['song_artist'])
 
         ## Clear cache if new user uploads data
         cache.clear()
         return redirect("/years")
+
     
         
     
@@ -120,6 +131,9 @@ def years():
 @app.route("/filter", methods=["GET", "POST"])
 def filter():
     if request.method == "GET":
+        # Check if we have processed results
+        if 'processed_results' not in session:
+            return redirect("/")
         return render_template("filter.html")
 
     if request.method == "POST":
@@ -153,72 +167,77 @@ def results():
         if cached_results is not None:
             return render_template('results.html', path=session['path'], years=session['selected_years'], results=cached_results, all_time=Approved_years)
 
-        ## Set up folder path to json files and get file names
-        folder_path = os.path.join(app.root_path, 'json_files')
-        input_files = os.listdir(folder_path)
-
-        ## File paths for each json file 
-        input_file_paths = [os.path.join(folder_path, file) for file in input_files]
-
-        ## name output file and call merge to make one json file
-        output_file = 'merged_file.json'
-        helpers.merge_json(input_file_paths, output_file)
-
-        ## load merged file
-        f = open('merged_file.json')
-        data = json.load(f)
-
-        ## Set up empty dictionaries for results
-        favs = {}
-        songs = {}
-        albums = {}
-
-        ## Main for loop that goes through each object in JSON
-        for stream in data:
-
-            ## Get the year of stream from JSON
-            time_string = stream['ts']
-            date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
-            stream_year = str(date_object.year)
-
-            ## Filter through years selected by user, abort loop if not found
-            if stream_year not in session['selected_years']:
-                continue
-
-            ## Set up json artist, song, album variables
-            artist = stream['master_metadata_album_artist_name']
-            song = stream['master_metadata_track_name']
-            album = stream['master_metadata_album_album_name']
-            track_uri = stream['spotify_track_uri']
-
-            if artist == None:
-                continue
+        # Get processed results from session
+        processed_results = session.get('processed_results', {})
         
-            ## Artist Dictionary
-            if artist in favs:
-                favs[artist] += 1
-            else: 
-                favs[artist] = 1
+        # If no results, redirect to home
+        if not processed_results:
+            return redirect("/")
+        
+        # Get the appropriate data based on selection
+        if selected_option == "artists":
+            data_to_process = processed_results.get('artists', [])
+        elif selected_option == "songs":
+            data_to_process = processed_results.get('songs', [])
+        else:
+            data_to_process = processed_results.get('albums', [])
+
+        top_artists = session.get('top_artists', [])
+        top_songs = session.get('top_songs', [])
+        top_albums = session.get('top_albums', [])
+        song_artist = session.get('song_aritst', [])
+
+        # ## Set up empty dictionaries for results
+        # favs = {}
+        # songs = {}
+        # albums = {}
+
+        # ## Main for loop that goes through each object in JSON
+        # for stream in data:
+
+        #     ## Get the year of stream from JSON
+        #     time_string = stream['ts']
+        #     date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
+        #     stream_year = str(date_object.year)
+
+        #     ## Filter through years selected by user, abort loop if not found
+        #     if stream_year not in session['selected_years']:
+        #         continue
+
+        #     ## Set up json artist, song, album variables
+        #     artist = stream['master_metadata_album_artist_name']
+        #     song = stream['master_metadata_track_name']
+        #     album = stream['master_metadata_album_album_name']
+        #     track_uri = stream['spotify_track_uri']
+
+        #     if artist == None:
+        #         continue
+        
+        #     ## Artist Dictionary
+        #     if artist in favs:
+        #         favs[artist] += 1
+        #     else: 
+        #         favs[artist] = 1
 
         
-            ## Song Dictionary
-            if (song, artist,album, track_uri) in songs:
-                songs[(song, artist,album, track_uri)] += 1
-            else:
-                songs[(song, artist,album, track_uri)] = 1
+        #     ## Song Dictionary
+        #     if (song, artist,album, track_uri) in songs:
+        #         songs[(song, artist,album, track_uri)] += 1
+        #     else:
+        #         songs[(song, artist,album, track_uri)] = 1
    
-            ## Album Dictionary
-            if (album, artist) in albums:
-                albums[(album, artist)] += 1
-            else:
-                albums[(album, artist)] = 1
+        #     ## Album Dictionary
+        #     if (album, artist) in albums:
+        #         albums[(album, artist)] += 1
+        #     else:
+        #         albums[(album, artist)] = 1
 
-        ## Make sure theres data in the dictionaries, if not - return error page
-        if len(favs) == 0:
-            return render_template("error.html", message="No data for those years.", path='Homepage')
+        # ## Make sure theres data in the dictionaries, if not - return error page
+        # if len(favs) == 0:
+        #     return render_template("error.html", message="No data for those years.", path='Homepage')
 
 
-        ## Set up Top Ten Dictionary
+        # ## Set up Top Ten Dictionary
         results = {}
 
     
@@ -230,19 +249,20 @@ def results():
 
         ## Paths are Artist, Song, and Albums
         if session['path'] == "artists":
-            ## Sort Artists for Top Ten in sorted dict   
-            sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
-            convert_favs = dict(sorted_favs)
+            # ## Sort Artists for Top Ten in sorted dict   
+            # sorted_favs = sorted(favs.items(), key=lambda x:x[1], reverse=True)
+            # convert_favs = dict(sorted_favs)
 
-            counter = 0
+            # counter = 0
             ## insert top ten for artists
-            for artist, number in convert_favs.items():  
+            for artist, number in top_artists:  
+        
                   
                 ## Get tuple of potential artists with current artist name
                 potential_artists = helpers.search_for_artist_info(spotify, artist)
 
                 ## Select best artist match with this function
-                artist_info = helpers.verify_artist(spotify, potential_artists, songs)
+                artist_info = helpers.verify_artist(spotify, potential_artists, song_artist)
 
                 ## Pass on artist whose profile is null 
                 if not artist_info:
@@ -259,10 +279,10 @@ def results():
                 ## Insert into results all info and picture
                 results[artist, number, artist_uri] = artist_pic
 
-                ## Update counter and break loop at 10. 
-                counter += 1
-                if counter == 10:
-                    break 
+                # ## Update counter and break loop at 10. 
+                # counter += 1
+                # if counter == 10:
+                #     break 
         
         if session['path'] == "songs":
             ## Sort
@@ -369,9 +389,29 @@ def internal_server_error(e):
     print("flaf")
     return render_template('500.html'), 500
 
+# Add this new route for streaming processing
+@app.route("/process-streaming", methods=["POST"])
+def process_streaming():
+    if request.method == "POST":
+        # Get files from request
+        files = request.files.getlist('files')
+        
+        # Get selected years
+        selected_years = request.form.getlist('selectedYears')
+        
+        # Store selected years in session for later use
+        session['selected_years'] = selected_years
+        
+        # Process files in streaming fashion
+        results = process_streaming_data(files, selected_years)
+        
+        # Store processed results in session (these are much smaller than raw files)
+        session['processed_results'] = results
+        
+        # Return success response
+        return jsonify({"success": True})
 
 # port = int(os.getenv('PORT', 5000))
 # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port=port)
 
-    

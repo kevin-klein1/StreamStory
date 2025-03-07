@@ -10,8 +10,49 @@ from flask import request, redirect
 ## Define Functions
 
 
-## reads json object, stringfy's it and writes/creates json file in workspace. Used to read json server side. 
+import json
 
+import json
+
+def merge_json_streaming(files):
+    """Processes JSON files in a memory-efficient way, returning both top counts and all parsed records."""
+    
+    artist_counts = {}
+    song_counts = {}
+    album_counts = {}
+    song_artist = []
+
+    for file in files:
+        try:
+            # Load full JSON (since it's an array of objects)
+            data = json.load(file)  
+        except json.JSONDecodeError:
+            continue  # Skip invalid JSON
+
+        for stream in data:  # Process each record
+            artist = stream.get("master_metadata_album_artist_name")
+            song = stream.get("master_metadata_track_name")
+            album = stream.get("master_metadata_album_album_name")
+            song_artist_tuple = song, artist
+            song_artist.append(song_artist_tuple)
+
+            if not artist or not song or not album:
+                continue  
+
+            # Update artist count
+            artist_counts[artist] = artist_counts.get(artist, 0) + 1
+            song_counts[(song, artist, album)] = song_counts.get((song, artist, album), 0) + 1
+            album_counts[(album, artist)] = album_counts.get((album, artist), 0) + 1
+
+    # Get Top 10 sorted results
+    top_artists = sorted(artist_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_songs = sorted(song_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_albums = sorted(album_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+
+    return top_artists, top_songs, top_albums, song_artist  # ✅ Return all records too!
+
+
+## reads json object, stringfy's it and writes/creates json file in workspace. Used to read json server side. 
 def write_json_file(object):
     json_str = json.dumps(object)
     with open('test.json', 'w') as file:
@@ -35,7 +76,6 @@ def merge_json(files, output_file):
 def search_for_artist_info(spotify, artist):
     # Make the API call to search for artists by name
     results = spotify.search(q='artist:' + artist, type='artist')
-
 
     # Extract items (artists) from the response. Returns an object of potential artsts
     items = results['artists']['items']
