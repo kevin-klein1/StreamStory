@@ -7,10 +7,10 @@ import datetime
 import helpers
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from streaming_helpers import process_streaming_data
 
 
 
+json_data_store = {}  # Global variable for storing data in memory
 
 
 
@@ -81,18 +81,20 @@ def index():
         ## Get files from drag and drop
         files2 = request.files.getlist('file2')
 
+        
+
         ## Process files directly using streaming (no saving to disk)
-        top_artists, top_songs, top_albums, song_artist = helpers.merge_json_streaming(files + files2)
-
-
+        top_artists, top_songs, top_albums, song_artist = helpers.merge_json_streaming(files + files2, Approved_years)
 
         ## Store results in session (so it persists when user goes to /years)
         session['top_artists'] = top_artists
         session['top_songs'] = top_songs
         session['top_albums'] = top_albums
-        session['song_artist'] = song_artist
 
-        print(session['song_artist'])
+        json_data_store['all_streams'] = song_artist  # Store all parsed records
+
+
+     
 
         ## Clear cache if new user uploads data
         cache.clear()
@@ -104,7 +106,10 @@ def index():
 @app.route("/years", methods=["GET", "POST"])
 def years():
     if request.method == "GET":
+
+        print(json_data_store['all_streams'])
         return render_template("years.html")
+
 
 
     if request.method == "POST":
@@ -131,9 +136,7 @@ def years():
 @app.route("/filter", methods=["GET", "POST"])
 def filter():
     if request.method == "GET":
-        # Check if we have processed results
-        if 'processed_results' not in session:
-            return redirect("/")
+
         return render_template("filter.html")
 
     if request.method == "POST":
@@ -167,20 +170,8 @@ def results():
         if cached_results is not None:
             return render_template('results.html', path=session['path'], years=session['selected_years'], results=cached_results, all_time=Approved_years)
 
-        # Get processed results from session
-        processed_results = session.get('processed_results', {})
+    
         
-        # If no results, redirect to home
-        if not processed_results:
-            return redirect("/")
-        
-        # Get the appropriate data based on selection
-        if selected_option == "artists":
-            data_to_process = processed_results.get('artists', [])
-        elif selected_option == "songs":
-            data_to_process = processed_results.get('songs', [])
-        else:
-            data_to_process = processed_results.get('albums', [])
 
         top_artists = session.get('top_artists', [])
         top_songs = session.get('top_songs', [])
@@ -262,7 +253,7 @@ def results():
                 potential_artists = helpers.search_for_artist_info(spotify, artist)
 
                 ## Select best artist match with this function
-                artist_info = helpers.verify_artist(spotify, potential_artists, song_artist)
+                artist_info = helpers.verify_artist(spotify, potential_artists, json_data_store['all_streams'])
 
                 ## Pass on artist whose profile is null 
                 if not artist_info:
@@ -389,27 +380,7 @@ def internal_server_error(e):
     print("flaf")
     return render_template('500.html'), 500
 
-# Add this new route for streaming processing
-@app.route("/process-streaming", methods=["POST"])
-def process_streaming():
-    if request.method == "POST":
-        # Get files from request
-        files = request.files.getlist('files')
-        
-        # Get selected years
-        selected_years = request.form.getlist('selectedYears')
-        
-        # Store selected years in session for later use
-        session['selected_years'] = selected_years
-        
-        # Process files in streaming fashion
-        results = process_streaming_data(files, selected_years)
-        
-        # Store processed results in session (these are much smaller than raw files)
-        session['processed_results'] = results
-        
-        # Return success response
-        return jsonify({"success": True})
+
 
 # port = int(os.getenv('PORT', 5000))
 # if __name__ == '__main__':

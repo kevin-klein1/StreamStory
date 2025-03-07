@@ -2,6 +2,7 @@ import json
 from dotenv import load_dotenv
 import os
 from flask import request, redirect
+import datetime
 
 
 
@@ -14,7 +15,7 @@ import json
 
 import json
 
-def merge_json_streaming(files):
+def merge_json_streaming(files, years):
     """Processes JSON files in a memory-efficient way, returning both top counts and all parsed records."""
     
     artist_counts = {}
@@ -30,6 +31,14 @@ def merge_json_streaming(files):
             continue  # Skip invalid JSON
 
         for stream in data:  # Process each record
+
+            time_string = stream['ts']
+            date_object = datetime.datetime.strptime(time_string, '%Y-%m-%dT%H:%M:%SZ')
+            stream_year = str(date_object.year)
+
+            if stream_year not in years:
+                continue
+
             artist = stream.get("master_metadata_album_artist_name")
             song = stream.get("master_metadata_track_name")
             album = stream.get("master_metadata_album_album_name")
