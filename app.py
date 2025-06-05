@@ -22,12 +22,10 @@ UPLOAD_FOLDER = os.path.join(app.root_path, 'json_files')
 ALLOWED_EXT = {'json'}
 
 
-
 ## Cookie config 
 app.config['SESSION_COOKIE_NAME'] = 'User Cookie'
 app.secret_key = '123g834#$9gsfg54'
 TOKEN_INFO = "token_info"
-
 
 
 ## Config upload path
