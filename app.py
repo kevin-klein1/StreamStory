@@ -11,8 +11,6 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 
 
-
-
 ## Set up flask app
 app = Flask(__name__)
 ## cache support for results
