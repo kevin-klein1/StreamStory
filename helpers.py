@@ -5,8 +5,6 @@ from flask import request, redirect
 
 
 
-
-
 ## Define Functions
 
 
@@ -99,10 +97,9 @@ def verify_artist(spotify, matches, user_data):
             if user_song[0] in song_bank and user_song[1].lower() == artist['name'].lower():
                 return artist['picture'], artist['id'], artist['uri'], artist['name']    
 
+    
     ## If none found, return None
     return None
-
-
 
 
 def search_for_album(spotify, album, artist_uri): 
@@ -156,7 +153,6 @@ def spotify_callback():
     if error == 'access_denied':
         # User denied access, redirect to a different page
         return redirect('/')
-
 
 ## load enviroment varialbes
 load_dotenv()
