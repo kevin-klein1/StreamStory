@@ -32,7 +32,7 @@ TOKEN_INFO = "token_info"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ## Global lists for approved years & result path
-Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023', '2024']
+Approved_years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023', '2024', '2025']
 Filter = ['artists', 'songs', 'albums']
 
 SCOPES = "playlist-read-collaborative user-top-read user-read-email user-read-private"
